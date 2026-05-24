@@ -95,8 +95,8 @@ export default function RootLayout({
                   <a href="mailto:hello@propertyinnepal.com" className="transition hover:text-slate-950">
                     hello@propertyinnepal.com
                   </a>
-                  <a href="tel:+9779800000000" className="transition hover:text-slate-950">
-                    +977 98000 00000
+                  <a href="tel:+9779851221475" className="transition hover:text-slate-950">
+                    +977-9851221475
                   </a>
                   <p>Kathmandu Valley, Nepal</p>
                 </div>

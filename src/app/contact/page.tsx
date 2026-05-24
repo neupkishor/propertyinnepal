@@ -15,8 +15,8 @@ const contactPoints = [
   },
   {
     label: "Phone",
-    value: "+977 98000 00000",
-    href: "tel:+9779800000000",
+    value: "+977-9851221475",
+    href: "tel:+9779851221475",
   },
   {
     label: "Location",
