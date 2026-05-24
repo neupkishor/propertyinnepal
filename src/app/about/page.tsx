@@ -1,126 +1,169 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SectionHeading } from "@/components/section-heading";
-import { heroStats, processSteps } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn how Property in Nepal blends local knowledge, premium presentation, and clear advice.",
+    "Learn about Property in Nepal's mission, vision, CEO message, and real estate process.",
 };
 
-const values = [
+const howItWorks = [
   {
-    title: "Market clarity",
+    title: "Listing Property",
     description:
-      "We simplify the options so clients can make confident decisions without getting lost in the noise.",
+      "Property owners list with us by sharing documents and key details. We verify information and craft listings that highlight each property's strengths.",
   },
   {
-    title: "Presentation quality",
+    title: "Property Evaluation",
     description:
-      "Strong visuals and polished copy make the right properties feel more compelling and easier to trust.",
+      "Our team evaluates each property based on location, condition, and market demand to help set a fair and competitive price.",
   },
   {
-    title: "Client momentum",
+    title: "Meet Agent and Friends",
     description:
-      "Fast follow-up, direct answers, and a disciplined process keep deals moving in the right direction.",
+      "Dedicated agents guide you step by step. Our legal and financial network is available when needed for smoother decisions.",
   },
-];
+  {
+    title: "Marketing",
+    description:
+      "We market properties through online channels, social media, and our buyer network to maximize visibility and lead quality.",
+  },
+  {
+    title: "Client Visits and Convincing",
+    description:
+      "We coordinate viewings, present the property professionally, and handle buyer questions to build confidence and interest.",
+  },
+  {
+    title: "Buyer-Seller Meeting",
+    description:
+      "We facilitate discussions, handle negotiations, and keep communication clear between both parties.",
+  },
+  {
+    title: "Close The Deal",
+    description:
+      "From paperwork to legal and payment coordination, we support the closing process so transactions finish smoothly.",
+  },
+] as const;
 
 export default function AboutPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-12 lg:px-8 lg:pt-16">
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-deep/70">
-            About us
+      <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
+        <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 shadow-sm sm:px-8 lg:px-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
+            About Us
           </p>
-          <h1 className="mt-4 font-display text-5xl leading-tight text-slate-950 sm:text-6xl">
-            A modern real estate partner for Nepal’s next wave of buyers and sellers.
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+            Building trust in Nepal&apos;s real estate market through service and
+            professionalism
           </h1>
-          <p className="mt-6 text-lg leading-8 text-slate-600">
-            Property in Nepal exists to make real estate feel more transparent,
-            more premium, and easier to move on. We pair local market knowledge
-            with a clean advisory process that helps people make better decisions.
+          <p className="mt-5 max-w-4xl text-base leading-7 text-slate-600 sm:text-lg">
+            Our vision is to become the foremost real estate company in Nepal,
+            admired for expertise, innovation, and a customer-centric approach.
+            We aim to contribute to the growth and development of the property
+            sector by providing comprehensive services, fostering long-term
+            relationships, and creating value for clients, employees, and
+            stakeholders.
+          </p>
+          <p className="mt-4 max-w-4xl text-base leading-7 text-slate-600 sm:text-lg">
+            Residential properties remain highly sought after in Nepal, serving
+            the growing urban population through options ranging from compact
+            studio apartments to larger family residences.
           </p>
         </div>
+      </section>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {heroStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-3xl border border-white/80 bg-white/85 p-5 shadow-sm backdrop-blur"
-            >
-              <p className="text-2xl font-semibold text-slate-950">{stat.value}</p>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{stat.label}</p>
-            </div>
-          ))}
+      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+        <div className="grid gap-5 md:grid-cols-2">
+          <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-deep/75">
+              Our Mission
+            </p>
+            <p className="mt-3 text-lg leading-8 text-slate-800">
+              “To enthusiastically serve our clients by providing tenants with
+              homes and workplaces that they can be proud of.”
+            </p>
+          </article>
+          <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-deep/75">
+              Our Vision
+            </p>
+            <p className="mt-3 text-lg leading-8 text-slate-800">
+              “To adapt and evolve to continue to offer beyond expectation
+              service and results, through creative thinking, leadership,
+              initiative, respect and passion.”
+            </p>
+          </article>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <SectionHeading
-          eyebrow="How we work"
-          title="Designed to keep the experience simple and the outcome stronger."
-          description="Every interaction is structured to reduce friction, speed up decisions, and improve confidence."
-        />
-
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {values.map((value) => (
-            <div
-              key={value.title}
-              className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-sm backdrop-blur"
-            >
-              <h2 className="font-display text-2xl text-slate-950">{value.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{value.description}</p>
-            </div>
-          ))}
-        </div>
+      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+        <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
+            Message From CEO
+          </p>
+          <p className="mt-4 text-base leading-7 text-slate-700 sm:text-lg">
+            As the CEO of Property in Nepal, I am grateful for your choice to
+            work with us as your trusted real estate partner. Property in Nepal
+            has grown into a top national brokerage through strong values, solid
+            culture, and long-standing relationships. Our priority remains
+            clients who are seeking real estate opportunities, investment
+            potential, and the right family home. We welcome both sellers and
+            buyers to experience professionalism and reliable guidance.
+          </p>
+          <div className="mt-6 border-t border-slate-200 pt-4">
+            <p className="text-lg font-semibold text-slate-950">Mr. Ramesh Barudi</p>
+            <p className="text-sm text-slate-600">CEO &amp; Founder</p>
+          </div>
+        </article>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <SectionHeading
-            eyebrow="Our process"
-            title="A team built around discovery, curation, and closing with confidence."
-            description="We do the work that keeps the shortlist relevant, the communication sharp, and the deal moving."
-          />
-
-          <div className="grid gap-4">
-            {processSteps.map((step, index) => (
-              <div
-                key={step.title}
-                className="flex gap-4 rounded-[1.5rem] border border-white/80 bg-white/85 p-5 shadow-sm backdrop-blur"
-              >
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] font-display text-lg font-semibold text-white shadow-lg shadow-sky-500/20">
-                  0{index + 1}
-                </div>
-                <div>
-                  <h2 className="font-display text-xl text-slate-950">{step.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{step.description}</p>
-                </div>
-              </div>
-            ))}
+      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
+              How It Works
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
+              Our streamlined process makes buying and selling simple
+            </h2>
           </div>
         </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {howItWorks.map((step, index) => (
+            <article
+              key={step.title}
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <div className="inline-flex size-9 items-center justify-center rounded-lg bg-slate-100 text-sm font-semibold text-slate-900">
+                {index + 1}
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-slate-950">{step.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{step.description}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:pb-24">
-        <div className="rounded-[2rem] border border-white/80 bg-white/85 px-6 py-10 shadow-sm backdrop-blur sm:px-8">
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-deep/70">
-                Next step
-              </p>
-              <h2 className="mt-3 font-display text-3xl text-slate-950">
-                If you want a cleaner way to buy or sell, let’s talk.
-              </h2>
-            </div>
+      <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-8 lg:pb-24">
+        <div className="rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f5f9ff)] px-6 py-10 shadow-sm sm:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
+            Our Team
+          </p>
+          <h2 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-slate-950 sm:text-4xl">
+            Meet the people behind Property in Nepal
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+            Explore our team profile and connect with professionals across sales,
+            operations, marketing, finance, and client service.
+          </p>
+          <div className="mt-7">
             <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:-translate-y-0.5"
+              href="/about/team"
+              className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5"
             >
-              Contact the team
+              View our team
             </Link>
           </div>
         </div>
