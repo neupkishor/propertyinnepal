@@ -86,6 +86,12 @@ export default function RootLayout({
                       {item.label}
                     </Link>
                   ))}
+                  <Link href="/about/team" className="w-fit transition hover:text-slate-950">
+                    Team
+                  </Link>
+                  <Link href="/blogs" className="w-fit transition hover:text-slate-950">
+                    Blogs
+                  </Link>
                 </div>
               </div>
 

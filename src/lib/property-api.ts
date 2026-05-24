@@ -52,6 +52,48 @@ type PremiumResponse = {
   data: PropertyItem[];
 };
 
+export type BlogAuthor = {
+  name: string;
+  email: string | null;
+  username: string;
+};
+
+export type BlogItem = {
+  id: string;
+  title: string;
+  body: string | null;
+  slug: string;
+  author: BlogAuthor;
+  views: string;
+  likes: string | null;
+  banner: string;
+  created_at: string;
+  created_at_human: string;
+};
+
+export type BlogDetail = {
+  id: string;
+  title: string;
+  body: string | null;
+  slug: string;
+  author: BlogAuthor;
+  views: string;
+  likes: string | null;
+  banner: string;
+  created_at: string;
+  created_at_human: string;
+};
+
+type BlogsResponse = {
+  data: BlogItem[];
+  meta?: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
+};
+
 const API_BASE = "https://api.propertyinnepal.com.np/api/V1";
 
 export async function fetchProperties(page: number) {
@@ -97,4 +139,37 @@ export async function fetchPremiumProperties(page = 1) {
   }
 
   return (await response.json()) as PremiumResponse;
+}
+
+export async function fetchBlogs(page: number) {
+  const response = await fetch(`${API_BASE}/blogs?page=${page}`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch blogs: ${response.status}`);
+  }
+
+  return (await response.json()) as BlogsResponse;
+}
+
+export async function fetchBlogBySlug(slug: string) {
+  const response = await fetch(`${API_BASE}/blog/${slug}`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as {
+    data?: BlogDetail;
+    message?: string;
+  };
+
+  if (payload.message === "Blog Not Found" || !payload.data) {
+    return null;
+  }
+
+  return payload.data;
 }
