@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { featuredProperties, testimonials } from "@/lib/site";
+import { testimonials } from "@/lib/site";
+import { fetchPremiumProperties } from "@/lib/property-api";
 
 const quickCategories = [
   "Apartments",
@@ -77,7 +78,16 @@ const clientReviews = [
   },
 ] as const;
 
-export default function Home() {
+function formatListingPrice(price: string, onCalling: string) {
+  if (onCalling === "1") return "On Call";
+  return `NRS ${price}`;
+}
+
+export default async function Home() {
+  const premiumPayload = await fetchPremiumProperties(1);
+  const premiumListings = premiumPayload.data ?? [];
+  const heroPremium = premiumListings[0];
+
   return (
     <>
       <section className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-8 lg:pb-20 lg:pt-14">
@@ -179,15 +189,23 @@ export default function Home() {
               </div>
 
               <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_20px_50px_rgba(15,23,42,0.28)]">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/65">Featured now</p>
-                <h3 className="mt-3 text-xl font-semibold">Skyline Residences, Lalitpur</h3>
+                <p className="text-xs uppercase tracking-[0.3em] text-white/65">Premium listing</p>
+                <h3 className="mt-3 text-xl font-semibold">
+                  {heroPremium?.name ?? "Premium listings updated live"}
+                </h3>
                 <p className="mt-2 text-sm text-white/75">
-                  3 BHK premium apartment in a high-demand residential pocket.
+                  {heroPremium
+                    ? `${heroPremium.location}, ${heroPremium.city}`
+                    : "Top premium properties from Property in Nepal."}
                 </p>
                 <div className="mt-4 flex items-end justify-between gap-4">
-                  <p className="text-2xl font-semibold">NRS 2.8 Cr</p>
+                  <p className="text-2xl font-semibold">
+                    {heroPremium
+                      ? formatListingPrice(heroPremium.price, heroPremium.on_calling)
+                      : "NRS Pricing"}
+                  </p>
                   <span className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold text-white/90">
-                    Ready to Move
+                    {heroPremium?.for ?? "For sale"}
                   </span>
                 </div>
               </div>
@@ -216,7 +234,7 @@ export default function Home() {
               Property Listings
             </p>
             <h2 className="mt-3 font-display text-3xl text-slate-950 sm:text-4xl">
-              Featured listings in and around Lalitpur
+              Premium listings from Property in Nepal
             </h2>
           </div>
           <Link href="/properties" className="text-sm font-semibold text-brand-deep hover:text-brand">
@@ -225,27 +243,27 @@ export default function Home() {
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {featuredProperties.slice(0, 6).map((property) => (
+          {premiumListings.slice(0, 6).map((property) => (
             <article
-              key={property.name}
+              key={property.id}
               className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm text-slate-500">{property.type}</p>
-                  <h3 className="mt-1 font-display text-2xl text-slate-950">{property.name}</h3>
-                </div>
-                <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-brand-deep">
-                  {property.highlight}
-                </span>
+              <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                <Image
+                  src={property.images?.[0] ?? "/logo.png"}
+                  alt={property.name}
+                  width={960}
+                  height={640}
+                  className="h-48 w-full object-cover object-center transition duration-300 hover:scale-[1.02]"
+                />
               </div>
-              <p className="mt-3 text-sm text-slate-600">{property.location}</p>
-              <p className="mt-5 text-2xl font-semibold text-slate-950">{property.price}</p>
-              <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
-                <span className="rounded-full bg-slate-100 px-3 py-1">{property.area}</span>
-                <span className="rounded-full bg-slate-100 px-3 py-1">{property.beds}</span>
-                <span className="rounded-full bg-slate-100 px-3 py-1">{property.baths}</span>
-              </div>
+              <h3 className="mt-4 font-display text-2xl text-slate-950">{property.name}</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                {property.location}, {property.city}
+              </p>
+              <p className="mt-4 text-2xl font-semibold text-slate-950">
+                {formatListingPrice(property.price, property.on_calling)}
+              </p>
             </article>
           ))}
         </div>
