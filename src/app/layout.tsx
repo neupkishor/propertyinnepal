@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Manrope } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { HeaderNav } from "@/components/header-nav";
 import { navigation } from "@/lib/site";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -28,27 +28,27 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} h-full scroll-smooth antialiased`}
+      className={`${outfit.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         <div className="relative isolate flex min-h-screen flex-col overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-white" />
-          <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/75 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+          <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.18)]">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
               <Link href="/" className="flex items-center gap-3">
                 <Image
                   src="/logo.png"
                   alt="Property in Nepal logo"
-                  width={44}
-                  height={44}
-                  className="rounded-xl border border-slate-200 bg-white p-1 shadow-sm"
+                  width={2278}
+                  height={1343}
+                  className="h-auto max-h-12 w-auto object-contain"
                 />
                 <span>
-                  <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                  <span className="block text-base font-bold text-slate-950">
                     Property in Nepal
                   </span>
-                  <span className="block text-sm text-slate-600">
-                    Modern real estate advisory
+                  <span className="block text-xs font-medium text-slate-600">
+                    Perfect place for property solution
                   </span>
                 </span>
               </Link>

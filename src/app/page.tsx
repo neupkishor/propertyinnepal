@@ -12,15 +12,6 @@ const quickCategories = [
   "Rental Ready",
 ] as const;
 
-const searchFilters = [
-  "Lalitpur",
-  "Bhaisepati",
-  "Jawalakhel",
-  "Sanepa",
-  "Budget under NRS 3 Cr",
-  "Ready to Move",
-] as const;
-
 const propertyCollections = [
   {
     name: "Premium Lalitpur Homes",
@@ -87,129 +78,69 @@ export default async function Home() {
   const premiumPayload = await fetchPremiumProperties(1);
   const premiumListings = premiumPayload.data ?? [];
   const heroPremium = premiumListings[0];
+  const heroImage =
+    heroPremium?.images?.[0] ??
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=90";
 
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-8 lg:pb-20 lg:pt-14">
-        <div className="relative overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white shadow-[0_30px_90px_rgba(15,23,42,0.1)]">
-          <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-sky-100/70 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-indigo-100/60 blur-3xl" />
+      <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white">
+        <Image
+          src={heroImage}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.88)_0%,rgba(2,6,23,0.6)_42%,rgba(2,6,23,0.12)_75%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.8)_0%,transparent_55%)]" />
 
-          <div className="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.08fr_0.92fr] lg:p-12">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-                <Image src="/logo.png" alt="Property in Nepal logo" width={26} height={26} />
-                <span className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">
-                  Lalitpur-focused Real Estate
-                </span>
-              </div>
+        <div className="relative mx-auto flex w-full max-w-7xl items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
+          <div className="max-w-3xl">
+            <p className="inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.08em] text-white backdrop-blur-md">
+              Find your next home in Nepal
+            </p>
 
-              <h1 className="max-w-3xl font-display text-4xl leading-[1.08] text-slate-950 sm:text-5xl lg:text-6xl">
-                Find the right property in Lalitpur without the usual chaos.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-slate-600">
-                Verified listings, serious seller inventory, and pricing clarity in NRS.
-                Built for buyers and investors who want better options and faster decisions.
-              </p>
+            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:text-5xl lg:text-7xl">
+              Find the right property without the usual chaos.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
+              Verified listings, serious seller inventory, and pricing clarity in NRS.
+              Built for buyers and investors who want better options and faster decisions.
+            </p>
 
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/properties"
-                  className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition hover:-translate-y-0.5"
-                >
-                  Explore listings
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-                >
-                  Book consultation
-                </Link>
-              </div>
+            <form
+              action="/properties"
+              className="mt-7 flex max-w-2xl flex-col gap-2 rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl shadow-slate-950/30 backdrop-blur-md sm:flex-row"
+            >
+              <label htmlFor="hero-property-search" className="sr-only">
+                Search properties by location or keyword
+              </label>
+              <input
+                id="hero-property-search"
+                name="q"
+                type="search"
+                placeholder="Search by location or property..."
+                className="min-w-0 flex-1 rounded-xl bg-transparent px-4 py-3 text-sm text-slate-950 outline-none placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-sky-400"
+              />
+              <button
+                type="submit"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/50"
+              >
+                Search properties
+              </button>
+            </form>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <p className="text-2xl font-semibold text-slate-950">250+</p>
-                  <p className="text-sm text-slate-600">Active listings</p>
-                </article>
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <p className="text-2xl font-semibold text-slate-950">4.9/5</p>
-                  <p className="text-sm text-slate-600">Client rating</p>
-                </article>
-                <article className="rounded-xl border border-slate-200 bg-white p-4">
-                  <p className="text-2xl font-semibold text-slate-950">15+ yrs</p>
-                  <p className="text-sm text-slate-600">Market experience</p>
-                </article>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {searchFilters.map((filter) => (
-                  <span
-                    key={filter}
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm"
-                  >
-                    {filter}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                  Smart Property Search
-                </p>
-                <h2 className="mt-3 font-display text-2xl text-slate-950">Start your search</h2>
-
-                <form className="mt-5 grid gap-3">
-                  <input
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none ring-brand/20 transition focus:ring-4"
-                    placeholder="Location (e.g., Lalitpur)"
-                  />
-                  <select className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none ring-brand/20 transition focus:ring-4">
-                    <option>Property category</option>
-                    {quickCategories.map((category) => (
-                      <option key={category}>{category}</option>
-                    ))}
-                  </select>
-                  <select className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none ring-brand/20 transition focus:ring-4">
-                    <option>Budget range (NRS)</option>
-                    <option>Under NRS 1 Cr</option>
-                    <option>NRS 1 Cr - NRS 2 Cr</option>
-                    <option>NRS 2 Cr - NRS 4 Cr</option>
-                    <option>Above NRS 4 Cr</option>
-                  </select>
-                  <button
-                    type="button"
-                    className="mt-1 inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:-translate-y-0.5"
-                  >
-                    Search properties
-                  </button>
-                </form>
-              </div>
-
-              <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_20px_50px_rgba(15,23,42,0.28)]">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/65">Premium listing</p>
-                <h3 className="mt-3 text-xl font-semibold">
-                  {heroPremium?.name ?? "Premium listings updated live"}
-                </h3>
-                <p className="mt-2 text-sm text-white/75">
-                  {heroPremium
-                    ? `${heroPremium.location}, ${heroPremium.city}`
-                    : "Top premium properties from Property in Nepal."}
-                </p>
-                <div className="mt-4 flex items-end justify-between gap-4">
-                  <p className="text-2xl font-semibold">
-                    {heroPremium
-                      ? formatListingPrice(heroPremium.price, heroPremium.on_calling)
-                      : "NRS Pricing"}
-                  </p>
-                  <span className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold text-white/90">
-                    {heroPremium?.for ?? "For sale"}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <Link
+              href="/properties"
+              className="mt-5 inline-flex items-center justify-center gap-3 text-sm font-semibold text-white transition hover:text-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/50"
+            >
+              Explore all properties
+              <span aria-hidden className="text-xl leading-none">
+                →
+              </span>
+            </Link>
           </div>
         </div>
       </section>

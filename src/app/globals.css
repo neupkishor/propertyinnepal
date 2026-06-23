@@ -18,8 +18,8 @@
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
   --color-border: var(--border);
-  --font-sans: var(--font-manrope);
-  --font-display: var(--font-manrope);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-outfit);
 }
 
 html {
@@ -29,7 +29,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
+  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
 }
 
 ::selection {
