@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -131,11 +130,13 @@ export default function TeamPage() {
               key={`${member.name}-${member.id}`}
               className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
-              <Image
+              <img
                 src={member.image}
                 alt={member.name}
                 width={640}
                 height={640}
+                loading="lazy"
+                decoding="async"
                 className="mb-4 aspect-square w-full rounded-xl border border-slate-200 bg-slate-100 object-cover object-top transition duration-300 group-hover:scale-[1.02]"
               />
               <h2 className="mt-3 text-xl font-semibold text-slate-950 transition-colors duration-200 group-hover:text-brand-deep">

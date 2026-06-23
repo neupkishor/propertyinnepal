@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { testimonials } from "@/lib/site";
 import { fetchPremiumProperties } from "@/lib/property-api";
@@ -85,13 +84,13 @@ export default async function Home() {
   return (
     <>
       <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white">
-        <Image
+        <img
           src={heroImage}
           alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.88)_0%,rgba(2,6,23,0.6)_42%,rgba(2,6,23,0.12)_75%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.8)_0%,transparent_55%)]" />
@@ -102,7 +101,7 @@ export default async function Home() {
               Find your next home in Nepal
             </p>
 
-            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:text-5xl lg:text-7xl">
+            <h1 className="mt-6 font-display text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:text-4xl lg:text-6xl">
               Find the right property without the usual chaos.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
@@ -180,11 +179,13 @@ export default async function Home() {
               className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                <Image
+                <img
                   src={property.images?.[0] ?? "/logo.png"}
                   alt={property.name}
                   width={960}
                   height={640}
+                  loading="lazy"
+                  decoding="async"
                   className="h-48 w-full object-cover object-center transition duration-300 hover:scale-[1.02]"
                 />
               </div>

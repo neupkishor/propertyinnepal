@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Outfit } from "next/font/google";
 import { HeaderNav } from "@/components/header-nav";
@@ -36,18 +35,20 @@ export default function RootLayout({
           <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.18)]">
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
               <Link href="/" className="flex items-center gap-3">
-                <Image
+                <img
                   src="/logo.png"
                   alt="Property in Nepal logo"
                   width={2278}
                   height={1343}
-                  className="h-auto max-h-12 w-auto object-contain"
+                  loading="eager"
+                  decoding="async"
+                  className="h-auto max-h-11 w-auto rounded-md object-contain"
                 />
                 <span>
-                  <span className="block text-base font-bold text-slate-950">
+                  <span className="block text-base font-bold text-brand-deep">
                     Property in Nepal
                   </span>
-                  <span className="block text-xs font-medium text-slate-600">
+                  <span className="block text-xs font-medium text-brand">
                     Perfect place for property solution
                   </span>
                 </span>

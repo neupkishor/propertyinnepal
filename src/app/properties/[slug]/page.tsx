@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchPropertyBySlug } from "@/lib/property-api";
@@ -84,11 +83,13 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
               key={`${property.id}-image-${index}`}
               className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
             >
-              <Image
+              <img
                 src={image}
                 alt={`${property.name} image ${index + 1}`}
                 width={1200}
                 height={800}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
                 className="h-64 w-full object-cover object-center"
               />
             </div>

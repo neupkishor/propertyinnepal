@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { fetchProperties } from "@/lib/property-api";
 
@@ -62,11 +61,13 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
                   href={`/properties/${property.slug}`}
                   className="block overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
                 >
-                  <Image
+                  <img
                     src={property.images?.[0] ?? "/logo.png"}
                     alt={property.name}
                     width={960}
                     height={640}
+                    loading="lazy"
+                    decoding="async"
                     className="h-52 w-full object-cover object-center transition duration-300 hover:scale-[1.02]"
                   />
                 </Link>

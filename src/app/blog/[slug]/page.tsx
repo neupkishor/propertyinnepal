@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchBlogBySlug } from "@/lib/property-api";
@@ -58,11 +57,13 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
 
       <section className="mx-auto max-w-7xl px-6 pb-10 lg:px-8">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-          <Image
+          <img
             src={blog.banner}
             alt={blog.title}
             width={1400}
             height={860}
+            loading="eager"
+            decoding="async"
             className="h-auto max-h-[32rem] w-full object-cover"
           />
         </div>

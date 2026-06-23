@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { fetchBlogs } from "@/lib/property-api";
 
@@ -52,11 +51,13 @@ export default async function BlogsPage({ searchParams }: BlogsPageProps) {
                 className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                  <Image
+                  <img
                     src={blog.banner}
                     alt={blog.title}
                     width={1200}
                     height={720}
+                    loading="lazy"
+                    decoding="async"
                     className="h-52 w-full object-cover"
                   />
                 </div>

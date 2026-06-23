@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -65,11 +64,13 @@ export default function BranchesPage() {
               key={branch.city}
               className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
-              <Image
+              <img
                 src={branch.image}
                 alt={`${branch.city} office`}
                 width={1200}
                 height={760}
+                loading="lazy"
+                decoding="async"
                 className="mb-4 h-44 w-full rounded-xl border border-slate-200 object-cover"
               />
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
