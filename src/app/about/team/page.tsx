@@ -7,7 +7,17 @@ export const metadata: Metadata = {
     "Meet the dedicated real estate professionals behind Property in Nepal.",
 };
 
-const teamMembers = [
+type SocialLinkKey = "facebook" | "linkedin" | "instagram" | "tiktok" | "youtube";
+
+type TeamMember = {
+  name: string;
+  role: string;
+  id: string;
+  image: string;
+  socials: Partial<Record<SocialLinkKey, string>>;
+};
+
+const teamMembers: readonly TeamMember[] = [
   {
     name: "Ramesh Barudi",
     role: "CEO / Founder",

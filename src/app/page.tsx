@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { testimonials } from "@/lib/site";
-import { fetchPremiumProperties } from "@/lib/property-api";
+import { fetchPremiumProperties, type PropertyFeature } from "@/lib/property-api";
 
 const quickCategories = [
   "Apartments",
@@ -73,9 +73,50 @@ function formatListingPrice(price: string, onCalling: string) {
   return `NRS ${price}`;
 }
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function getFeatureValue(
+  features: PropertyFeature[] | undefined,
+  matchers: RegExp[],
+) {
+  if (!features?.length) return null;
+
+  const feature = features.find((item) =>
+    matchers.some((matcher) => matcher.test(`${item.name} ${item.value}`)),
+  );
+
+  return feature?.value?.trim() || null;
+}
+
+function getBedroomValue(features: PropertyFeature[] | undefined) {
+  return getFeatureValue(features, [/bed/i, /bedroom/i]) ?? "N/A";
+}
+
+function getSpaceValue(area: string | undefined) {
+  const normalized = area?.trim();
+  return normalized && normalized.length > 0 ? normalized : "N/A";
+}
+
+function getPropertySummary(description: string, location: string, city: string, type: string) {
+  const cleaned = stripHtml(description);
+
+  if (cleaned.length > 0) {
+    return cleaned;
+  }
+
+  return [type, location, city].filter(Boolean).join(" in ");
+}
+
 export default async function Home() {
   const premiumPayload = await fetchPremiumProperties(1);
   const premiumListings = premiumPayload.data ?? [];
+  const featuredListings = premiumListings
+    .filter((property) => property.is_featured === "1")
+    .slice(0, 8);
+  const homepageFeaturedListings =
+    featuredListings.length > 0 ? featuredListings : premiumListings.slice(0, 8);
   const heroPremium = premiumListings[0];
   const heroImage =
     heroPremium?.images?.[0] ??
@@ -111,7 +152,7 @@ export default async function Home() {
 
             <form
               action="/properties"
-              className="mt-7 flex max-w-2xl flex-col gap-2 rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl shadow-slate-950/30 backdrop-blur-md sm:flex-row"
+              className="mt-7 flex max-w-2xl items-center gap-2 rounded-2xl border border-white/20 bg-white/95 p-2 shadow-2xl shadow-slate-950/30 backdrop-blur-md"
             >
               <label htmlFor="hero-property-search" className="sr-only">
                 Search properties by location or keyword
@@ -125,9 +166,17 @@ export default async function Home() {
               />
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/50"
+                aria-label="Search properties"
+                className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] text-white transition duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/50"
               >
-                Search properties
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="size-5 fill-none stroke-current stroke-2"
+                >
+                  <circle cx="11" cy="11" r="6" />
+                  <path d="m20 20-4.2-4.2" strokeLinecap="round" />
+                </svg>
               </button>
             </form>
 
@@ -158,46 +207,93 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-              Property Listings
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-slate-950 sm:text-4xl">
-              Premium listings from Property in Nepal
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+            Featured Listings
+          </p>
+          <div className="mt-3 flex flex-wrap items-end gap-x-4 gap-y-3">
+            <h2 className="font-display text-3xl leading-tight text-slate-950 sm:text-4xl lg:text-5xl">
+              Explore and browse our exclusive property listings
             </h2>
+            <Link
+              href="/properties"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-deep transition hover:text-brand"
+            >
+              View more
+              <span aria-hidden className="text-base leading-none">
+                →
+              </span>
+            </Link>
           </div>
-          <Link href="/properties" className="text-sm font-semibold text-brand-deep hover:text-brand">
-            View all listings
-          </Link>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            Handpicked properties from our current live inventory with better visuals,
+            cleaner details, and faster paths to the listing page.{" "}
+            <Link href="/properties" className="font-semibold text-brand-deep hover:text-brand">
+              View more
+            </Link>
+          </p>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {premiumListings.slice(0, 6).map((property) => (
-            <article
-              key={property.id}
-              className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-            >
-              <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                <img
-                  src={property.images?.[0] ?? "/logo.png"}
-                  alt={property.name}
-                  width={960}
-                  height={640}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-48 w-full object-cover object-center transition duration-300 hover:scale-[1.02]"
-                />
-              </div>
-              <h3 className="mt-4 font-display text-2xl text-slate-950">{property.name}</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                {property.location}, {property.city}
-              </p>
-              <p className="mt-4 text-2xl font-semibold text-slate-950">
-                {formatListingPrice(property.price, property.on_calling)}
-              </p>
-            </article>
-          ))}
+        <div className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-4">
+          {homepageFeaturedListings.map((property) => {
+            const bedroomValue = getBedroomValue(property.features);
+
+            return (
+              <article
+                key={property.id}
+                className="min-w-[84%] snap-start sm:min-w-[48%] md:min-w-0"
+              >
+                <Link
+                  href={`/properties/${property.slug}`}
+                  className="group block"
+                >
+                  <div className="overflow-hidden rounded-[1.75rem] bg-slate-100">
+                    <img
+                      src={property.images?.[0] ?? "/logo.png"}
+                      alt={property.name}
+                      width={960}
+                      height={640}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-[1.08]"
+                    />
+                  </div>
+
+                  <div className="mt-5">
+                    <div>
+                      <h3 className="text-xl font-semibold leading-tight text-slate-950 sm:text-[1.35rem]">
+                        {property.name}
+                      </h3>
+                      <p className="mt-2 text-lg font-semibold leading-none text-slate-950 sm:text-xl">
+                        {formatListingPrice(property.price, property.on_calling)}
+                      </p>
+                    </div>
+
+                    <p className="mt-3 line-clamp-2 text-base leading-7 text-slate-600">
+                      {getPropertySummary(
+                        property.description,
+                        property.location,
+                        property.city,
+                        property.type,
+                      )}
+                    </p>
+
+                    <div className="mt-5 flex items-center justify-between gap-4 border-t border-slate-200 pt-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-slate-500">Bedroom</span>
+                        <span>{bedroomValue === "N/A" ? "N/A" : bedroomValue}</span>
+                      </div>
+                      <div className="h-1 w-1 rounded-full bg-slate-300" />
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-slate-500">Space</span>
+                        <span>{getSpaceValue(property.area)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </section>
 
