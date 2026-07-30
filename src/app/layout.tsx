@@ -33,7 +33,7 @@ export default function RootLayout({
         <div className="relative isolate flex min-h-screen flex-col overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-white" />
           <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.18)]">
-            <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:gap-6 lg:px-8">
               <Link href="/" className="flex items-center gap-3">
                 <img
                   src="/logo.png"
@@ -44,11 +44,11 @@ export default function RootLayout({
                   decoding="async"
                   className="h-auto max-h-11 w-auto rounded-md object-contain"
                 />
-                <span>
+                <span className="min-w-0">
                   <span className="block text-base font-bold text-brand-deep">
                     Property in Nepal
                   </span>
-                  <span className="block text-xs font-medium text-brand">
+                  <span className="hidden text-xs font-medium text-brand sm:block">
                     Perfect place for property solution
                   </span>
                 </span>
@@ -58,7 +58,7 @@ export default function RootLayout({
 
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-sky-500/30"
+                className="hidden items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-sky-500/30 md:inline-flex"
               >
                 Talk to an advisor
               </Link>
@@ -82,17 +82,19 @@ export default function RootLayout({
               <div>
                 <p className="text-sm font-semibold text-slate-950">Explore</p>
                 <div className="mt-4 grid gap-3 text-sm text-slate-600">
-                  {navigation.map((item) => (
-                    <Link key={item.href} href={item.href} className="w-fit transition hover:text-slate-950">
-                      {item.label}
-                    </Link>
-                  ))}
-                  <Link href="/about/team" className="w-fit transition hover:text-slate-950">
-                    Team
-                  </Link>
-                  <Link href="/blogs" className="w-fit transition hover:text-slate-950">
-                    Blogs
-                  </Link>
+                  {navigation.map((item) => {
+                    const target = item.children?.[0] ?? item;
+
+                    return (
+                      <Link
+                        key={item.label}
+                        href={target.href}
+                        className="w-fit transition hover:text-slate-950"
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
 

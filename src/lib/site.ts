@@ -1,14 +1,78 @@
 export type NavigationItem = {
   href: string;
   label: string;
+  children?: NavigationItem[];
 };
 
 export const navigation: NavigationItem[] = [
-  { href: "/", label: "Home" },
-  { href: "/properties", label: "Properties" },
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  {
+    href: "/properties?purpose=buy",
+    label: "Buy",
+    children: [
+      { href: "/properties?purpose=buy&type=house", label: "House" },
+      { href: "/properties?purpose=buy&type=colony-house", label: "Colony House" },
+      { href: "/properties?purpose=buy&type=land", label: "Land" },
+      { href: "/properties?purpose=buy&type=apartment", label: "Apartment" },
+      {
+        href: "/properties?purpose=buy&type=commercial-property",
+        label: "Commercial Property",
+      },
+      {
+        href: "/properties?purpose=buy&type=semi-commercial-property",
+        label: "Semi Commercial Property",
+      },
+    ],
+  },
+  {
+    href: "/properties?purpose=rent",
+    label: "Rent",
+    children: [
+      { href: "/properties?purpose=rent&type=house", label: "House" },
+      { href: "/properties?purpose=rent&type=colony-house", label: "Colony House" },
+      { href: "/properties?purpose=rent&type=land", label: "Land" },
+      { href: "/properties?purpose=rent&type=apartment", label: "Apartment" },
+      {
+        href: "/properties?purpose=rent&type=commercial-property",
+        label: "Commercial Property",
+      },
+      {
+        href: "/properties?purpose=rent&type=semi-commercial-property",
+        label: "Semi Commercial Property",
+      },
+    ],
+  },
+  { href: "/properties?media=video", label: "Videos" },
+  {
+    href: "/properties",
+    label: "Listings",
+    children: [
+      { href: "/properties?listing=premium", label: "Premium" },
+      { href: "/properties?listing=new", label: "New" },
+      { href: "/properties?listing=under-construction", label: "Under Construction" },
+      { href: "/properties?listing=sold", label: "Sold" },
+    ],
+  },
+  {
+    href: "/services",
+    label: "Tools",
+    children: [
+      { href: "/services?tool=emi-calculator", label: "EMI Calculator" },
+      { href: "/services?tool=unit-converter", label: "Unit Converter" },
+    ],
+  },
+  {
+    href: "/about",
+    label: "Company",
+    children: [
+      { href: "/about", label: "About Us" },
+      { href: "/about/branches", label: "Our Branches" },
+      { href: "/about/team", label: "Team" },
+      { href: "/services", label: "Services" },
+      { href: "/properties?listing=sold", label: "Sold Property" },
+      { href: "/blogs", label: "Blogs" },
+      { href: "/contact", label: "Contact Us" },
+    ],
+  },
 ];
 
 export const heroStats = [
