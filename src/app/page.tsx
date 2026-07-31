@@ -88,6 +88,8 @@ const clientReviews = [
     quote:
       "Their Lalitpur shortlist was exactly what we wanted. We closed within three weeks.",
     source: "From Google",
+    sourceHref:
+      "https://www.google.com/search?q=Property+In+Nepal+Pvt.+Ltd+reviews",
     author: "Aayusha Thapa",
   },
   {
@@ -98,6 +100,7 @@ const clientReviews = [
     quote:
       "Finally a team that explains pricing honestly in NRS and doesn’t waste your time.",
     source: "From Facebook",
+    sourceHref: "https://www.facebook.com/propertyinnepal/reviews",
     author: "Rijan Karki",
   },
   {
@@ -108,7 +111,44 @@ const clientReviews = [
     quote:
       "Strong negotiation and smooth process. The listing presentation looked premium.",
     source: "From Google",
+    sourceHref:
+      "https://www.google.com/search?q=Property+In+Nepal+Pvt.+Ltd+reviews",
     author: "Pranav Shrestha",
+  },
+  {
+    avatar:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&q=80",
+    rating: 5,
+    score: "4.9/5",
+    quote:
+      "They helped us compare locations clearly and handled the paperwork without confusion.",
+    source: "From Google",
+    sourceHref:
+      "https://www.google.com/search?q=Property+In+Nepal+Pvt.+Ltd+reviews",
+    author: "Smriti Maharjan",
+  },
+  {
+    avatar:
+      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=240&q=80",
+    rating: 5,
+    score: "4.8/5",
+    quote:
+      "The valuation guidance was practical, and our property received serious buyers quickly.",
+    source: "From Facebook",
+    sourceHref: "https://www.facebook.com/propertyinnepal/reviews",
+    author: "Bikash Shrestha",
+  },
+  {
+    avatar:
+      "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=240&q=80",
+    rating: 5,
+    score: "5.0/5",
+    quote:
+      "Responsive team, clean communication, and a much smoother buying process than expected.",
+    source: "From Google",
+    sourceHref:
+      "https://www.google.com/search?q=Property+In+Nepal+Pvt.+Ltd+reviews",
+    author: "Nisha Rai",
   },
 ] as const;
 
@@ -620,8 +660,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] px-6 py-14 text-slate-950 lg:px-8">
-        <div className="mx-auto max-w-[1440px]">
+      <section className="bg-[#eef4fa] py-14 text-slate-950">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
           <div className="max-w-3xl">
             <h2 className="font-display text-[1.4rem] font-bold leading-tight sm:text-[1.85rem] lg:text-[2.05rem]">
               Reviews From Our Clients
@@ -630,15 +670,17 @@ export default async function Home() {
               What people say after working with our team to buy, sell, or shortlist properties.
             </p>
           </div>
+        </div>
 
+        <div className="mx-auto max-w-[1440px]">
           <DragScrollCarousel
             autoScrollIntervalMs={6500}
-            className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:-mx-8 lg:scroll-pl-8 lg:px-8"
+            className="no-scrollbar mt-6 flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:scroll-pl-8 lg:px-8"
           >
             {clientReviews.map((review) => (
               <figure
                 key={review.author}
-                className="w-[82vw] max-w-[380px] shrink-0 snap-start rounded-xl border border-slate-200/70 bg-white p-6 shadow-[0_2px_8px_rgba(31,59,123,0.035)] sm:w-[46vw] lg:w-[31vw] xl:w-[calc((100%-2.5rem)/3)]"
+                className="flex min-h-[230px] w-[82vw] max-w-[380px] shrink-0 snap-start flex-col rounded-xl border border-slate-200/70 bg-white p-6 shadow-[0_2px_8px_rgba(31,59,123,0.035)] sm:w-[46vw] lg:w-[31vw] xl:w-[calc((100%_-_2.5rem)_/_3)] xl:max-w-none"
               >
                 <div className="flex items-center gap-3">
                   <img
@@ -661,9 +703,15 @@ export default async function Home() {
                 <blockquote className="mt-4 text-base leading-6 text-slate-700">
                   {review.quote}
                 </blockquote>
-                <p className="mt-4 text-xs font-medium text-slate-500">
+                <a
+                  href={review.sourceHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto w-fit pt-4 text-xs font-semibold text-slate-500 transition hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+                  aria-label={`Open ${review.source.replace("From ", "")} reviews in a new tab`}
+                >
                   {review.source}
-                </p>
+                </a>
               </figure>
             ))}
           </DragScrollCarousel>

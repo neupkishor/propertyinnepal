@@ -14,19 +14,35 @@ export function DragScrollCarousel({
   children,
   className = "",
 }: DragScrollCarouselProps) {
+  const interactionPauseMs = 10000;
   const scrollerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
+  const isHoveringRef = useRef(false);
+  const isTouchingRef = useRef(false);
+  const pauseUntilRef = useRef(0);
   const didDragRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  function pauseAutoScroll() {
+    pauseUntilRef.current = Date.now() + interactionPauseMs;
+  }
 
   useEffect(() => {
     if (!autoScrollIntervalMs) return;
 
     const intervalId = window.setInterval(() => {
       const scroller = scrollerRef.current;
-      if (!scroller || isDraggingRef.current) return;
+      if (
+        !scroller ||
+        isDraggingRef.current ||
+        isHoveringRef.current ||
+        isTouchingRef.current ||
+        Date.now() < pauseUntilRef.current
+      ) {
+        return;
+      }
 
       const snapItems = Array.from(scroller.children).filter(
         (child): child is HTMLElement => child instanceof HTMLElement,
@@ -52,9 +68,21 @@ export function DragScrollCarousel({
     return () => window.clearInterval(intervalId);
   }, [autoScrollIntervalMs]);
 
+  function handleMouseEnter() {
+    isHoveringRef.current = true;
+    pauseAutoScroll();
+  }
+
+  function handleMouseLeave() {
+    isHoveringRef.current = false;
+    stopDragging();
+    pauseAutoScroll();
+  }
+
   function handleMouseDown(event: MouseEvent<HTMLDivElement>) {
     if (event.button !== 0 || !scrollerRef.current) return;
 
+    pauseAutoScroll();
     isDraggingRef.current = true;
     didDragRef.current = false;
     startXRef.current = event.clientX;
@@ -66,6 +94,7 @@ export function DragScrollCarousel({
     const scroller = scrollerRef.current;
     if (!isDraggingRef.current || !scroller) return;
 
+    pauseAutoScroll();
     const deltaX = event.clientX - startXRef.current;
     if (Math.abs(deltaX) > 4) {
       didDragRef.current = true;
@@ -81,11 +110,27 @@ export function DragScrollCarousel({
   }
 
   function handleClickCapture(event: MouseEvent<HTMLDivElement>) {
+    pauseAutoScroll();
+
     if (!didDragRef.current) return;
 
     event.preventDefault();
     event.stopPropagation();
     didDragRef.current = false;
+  }
+
+  function handleTouchStart() {
+    isTouchingRef.current = true;
+    pauseAutoScroll();
+  }
+
+  function handleTouchMove() {
+    pauseAutoScroll();
+  }
+
+  function handleTouchEnd() {
+    isTouchingRef.current = false;
+    pauseAutoScroll();
   }
 
   return (
@@ -94,9 +139,14 @@ export function DragScrollCarousel({
       className={`${className} ${isDragging ? "cursor-grabbing select-none" : "cursor-grab"}`}
       onClickCapture={handleClickCapture}
       onMouseDown={handleMouseDown}
-      onMouseLeave={stopDragging}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       onMouseUp={stopDragging}
+      onTouchCancel={handleTouchEnd}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
+      onTouchStart={handleTouchStart}
     >
       {children}
     </div>
