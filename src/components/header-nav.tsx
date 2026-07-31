@@ -20,27 +20,68 @@ export function HeaderNav({ items }: HeaderNavProps) {
   const navRef = useRef<HTMLElement | null>(null);
   const itemRefs = useRef<Record<string, HTMLDivElement | HTMLAnchorElement | null>>({});
 
-  const isLinkActive = (href: string) => {
-    const target = new URL(href, "https://propertyinnepal.local");
-    const targetSearchEntries = Array.from(target.searchParams.entries());
+  const parseHref = (href: string) => new URL(href, "https://propertyinnepal.local");
 
-    if (targetSearchEntries.length > 0) {
-      const currentSearchParams = new URLSearchParams(currentSearch);
-      return (
-        pathname === target.pathname &&
-        targetSearchEntries.every(([key, value]) => currentSearchParams.get(key) === value)
-      );
+  const pathCandidates = (path: string) => {
+    const candidates = [path];
+    let currentPath = path;
+
+    while (currentPath !== "/") {
+      currentPath = currentPath.slice(0, currentPath.lastIndexOf("/")) || "/";
+      candidates.push(currentPath);
     }
 
-    return target.pathname === "/"
-      ? pathname === "/"
-      : pathname === target.pathname || pathname.startsWith(`${target.pathname}/`);
+    return candidates;
   };
 
-  const isItemActive = (item: NavigationItem): boolean =>
-    isLinkActive(item.href) || item.children?.some(isItemActive) === true;
+  const findDirectActiveHref = (levelItems: NavigationItem[]) => {
+    const currentSearchParams = new URLSearchParams(currentSearch);
+    const exactQueryMatch = levelItems.find((item) => {
+      const target = parseHref(item.href);
+      const targetSearchEntries = Array.from(target.searchParams.entries());
 
-  const activeHref = items.find((item) => isItemActive(item))?.href ?? items[0]?.href ?? "/";
+      return (
+        target.pathname === pathname &&
+        targetSearchEntries.length > 0 &&
+        targetSearchEntries.every(([key, value]) => currentSearchParams.get(key) === value)
+      );
+    });
+
+    if (exactQueryMatch) return exactQueryMatch.href;
+
+    for (const candidate of pathCandidates(pathname)) {
+      const pathMatch = levelItems.find((item) => {
+        const target = parseHref(item.href);
+        return target.search === "" && target.pathname === candidate;
+      });
+
+      if (pathMatch) return pathMatch.href;
+    }
+
+    return null;
+  };
+
+  const findActiveTrail = (levelItems: NavigationItem[]): string[] => {
+    const directActiveHref = findDirectActiveHref(levelItems);
+    const directActiveItem = levelItems.find((item) => item.href === directActiveHref);
+
+    if (directActiveItem) {
+      return [
+        directActiveItem.href,
+        ...(directActiveItem.children ? findActiveTrail(directActiveItem.children) : []),
+      ];
+    }
+
+    for (const item of levelItems) {
+      const childTrail = item.children ? findActiveTrail(item.children) : [];
+      if (childTrail.length > 0) return [item.href, ...childTrail];
+    }
+
+    return [];
+  };
+
+  const activeTrail = findActiveTrail(items);
+  const activeHref = activeTrail[0] ?? items[0]?.href ?? "/";
 
   const targetHref = hoveredHref ?? activeHref;
   const highlightIsActive = !hoveredHref;
@@ -116,7 +157,7 @@ export function HeaderNav({ items }: HeaderNavProps) {
         />
 
         {items.map((item) => {
-          const isActive = isItemActive(item);
+          const isActive = activeTrail[0] === item.href;
           const isHighlighted = item.href === targetHref;
           const hasChildren = (item.children?.length ?? 0) > 0;
           const isMenuOpen = openMenuHref === item.href;
@@ -201,7 +242,7 @@ export function HeaderNav({ items }: HeaderNavProps) {
                     <div className="min-w-[19rem] rounded-3xl border border-white/70 bg-white/95 p-3 shadow-[0_22px_70px_rgba(15,23,42,0.18)] ring-1 ring-slate-200/60 backdrop-blur-xl">
                       <div className={`grid gap-2 ${panelColumns}`}>
                         {item.children?.map((child) => {
-                          const isChildActive = isLinkActive(child.href);
+                          const isChildActive = activeTrail[0] === item.href && activeTrail[1] === child.href;
 
                           return (
                             <Link
@@ -263,7 +304,7 @@ export function HeaderNav({ items }: HeaderNavProps) {
       >
         <div className="grid gap-3">
           {items.map((item) => {
-            const isActive = isItemActive(item);
+            const isActive = activeTrail[0] === item.href;
             const hasChildren = (item.children?.length ?? 0) > 0;
             const isExpanded = mobileExpandedHref === item.href;
 
@@ -328,7 +369,7 @@ export function HeaderNav({ items }: HeaderNavProps) {
                   <div className="min-h-0">
                     <div className="grid gap-2">
                       {item.children?.map((child) => {
-                        const isChildActive = isLinkActive(child.href);
+                        const isChildActive = activeTrail[0] === item.href && activeTrail[1] === child.href;
 
                         return (
                           <Link

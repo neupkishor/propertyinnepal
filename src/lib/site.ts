@@ -44,8 +44,8 @@ export const navigation: NavigationItem[] = [
     href: "/services",
     label: "Tools",
     children: [
-      { href: "/services?tool=emi-calculator", label: "EMI Calculator" },
-      { href: "/services?tool=unit-converter", label: "Unit Converter" },
+      { href: "/tools/emi-calculator", label: "EMI Calculator" },
+      { href: "/tools/unit-converter", label: "Unit Converter" },
     ],
   },
   {
