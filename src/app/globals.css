@@ -141,3 +141,25 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.premium-properties-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.premium-properties-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 300ms ease;
+}
+
+.premium-properties-title-link:hover .premium-properties-underline,
+.premium-properties-title-link:focus-visible .premium-properties-underline,
+.premium-properties-link:hover .premium-properties-underline,
+.premium-properties-link:focus-visible .premium-properties-underline {
+  background-size: 100% 2px;
+}
