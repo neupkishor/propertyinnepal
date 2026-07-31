@@ -70,27 +70,43 @@ export default function RootLayout({
 
           <main className="flex-1 pt-[88px]">{children}</main>
 
-          <footer className="border-t border-white/70 bg-white/70 backdrop-blur-xl">
+          <footer className="border-t border-brand/20 bg-brand-deep text-white">
             <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-12 lg:grid-cols-[1.3fr_0.7fr_0.8fr] lg:px-8">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-                  Property in Nepal
-                </p>
-                <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
+                <Link href="/" className="flex w-fit items-center gap-3">
+                  <img
+                    src="/logo.png"
+                    alt="Property in Nepal logo"
+                    width={2278}
+                    height={1343}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-auto max-h-12 w-auto rounded-md bg-white object-contain p-1"
+                  />
+                  <span className="min-w-0">
+                    <span className="block text-base font-bold text-white">
+                      Property in Nepal
+                    </span>
+                    <span className="block text-xs font-medium text-sky-200">
+                      घर किन्दा सम्झिनु ल !
+                    </span>
+                  </span>
+                </Link>
+                <p className="mt-3 max-w-md text-sm leading-6 text-white/75">
                   A clean, modern real estate experience for premium homes,
                   investment properties, and serious sellers across Nepal.
                 </p>
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-slate-950">Explore</p>
-                <div className="mt-4 grid gap-3 text-sm text-slate-600">
+                <p className="text-sm font-semibold text-white">Explore</p>
+                <div className="mt-4 grid gap-3 text-sm text-white/75">
                   {navigation.map((item) => {
                     return (
                       <Link
                         key={item.label}
                         href={item.href}
-                        className="w-fit transition hover:text-slate-950"
+                        className="w-fit transition hover:text-white"
                       >
                         {item.label}
                       </Link>
@@ -100,20 +116,27 @@ export default function RootLayout({
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-slate-950">Contact</p>
-                <div className="mt-4 grid gap-3 text-sm text-slate-600">
-                  <a href="mailto:hello@propertyinnepal.com" className="transition hover:text-slate-950">
+                <p className="text-sm font-semibold text-white">Contact</p>
+                <div className="mt-4 grid gap-3 text-sm text-white/75">
+                  <a href="mailto:hello@propertyinnepal.com" className="w-fit transition hover:text-white">
                     hello@propertyinnepal.com
                   </a>
-                  <a href="tel:+9779851221475" className="transition hover:text-slate-950">
+                  <a href="tel:+9779851221475" className="w-fit transition hover:text-white">
                     +977-9851221475
                   </a>
-                  <p>Kathmandu Valley, Nepal</p>
+                  <a
+                    href="https://maps.app.goo.gl/S4EVVPcMwDfVCXL7A"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-fit transition hover:text-white"
+                  >
+                    Chambling Tower, 4th Floor, Imadole, Lalitpur, Nepal
+                  </a>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-slate-200/70 px-6 py-4 text-center text-xs text-slate-500 lg:px-8">
+            <div className="border-t border-white/15 px-6 py-4 text-center text-xs text-white/60 lg:px-8">
               Built for modern property discovery, lead capture, and high-intent sales.
             </div>
           </footer>

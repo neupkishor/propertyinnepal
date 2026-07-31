@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import PropertyCardS1 from "@/components/estate/propertyCard.s1";
-import { testimonials } from "@/lib/site";
 import {
   fetchBlogs,
   fetchPremiumProperties,
@@ -61,24 +60,6 @@ const quickCategories = [
     label: "Shop Space",
     tone: "bg-lime-50",
   },
-] as const;
-
-const teamNumbers = [
-  { value: "15+", label: "Years in the market" },
-  { value: "35+", label: "Real estate advisors" },
-  { value: "1,200+", label: "Clients served" },
-  { value: "96%", label: "Closing satisfaction rate" },
-] as const;
-
-const operatingLocations = [
-  "Lalitpur (Primary Focus)",
-  "Bhaisepati",
-  "Jawalakhel",
-  "Sanepa",
-  "Mahalaxmisthan",
-  "Imadol",
-  "Kupondole",
-  "Ekantakuna",
 ] as const;
 
 const clientReviews = [
@@ -796,84 +777,6 @@ export default async function Home() {
         </section>
       ) : null}
 
-      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Team Strength
-          </p>
-          <h2 className="mt-3 font-display text-3xl text-slate-950 sm:text-4xl">
-            Numbers that show execution, not just promises
-          </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {teamNumbers.map((stat) => (
-              <article key={stat.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-3xl font-semibold text-slate-950">{stat.value}</p>
-                <p className="mt-1 text-sm text-slate-600">{stat.label}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-              Locations We Operate
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-slate-950 sm:text-4xl">
-              Deep network in Lalitpur, active support across the valley
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600">
-              Our strongest inventory and deal flow is in Lalitpur. We also operate in
-              nearby demand pockets where buyers actively compare value and accessibility.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {operatingLocations.map((location) => (
-              <article key={location} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
-                {location}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8 lg:pb-20">
-        <div className="grid gap-6 rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f0f7ff)] p-6 shadow-sm sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-              Testimonials
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-slate-950 sm:text-4xl">
-              What clients say after working with us
-            </h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-3">
-              {testimonials.map((testimonial) => (
-                <article key={testimonial.author} className="rounded-xl border border-slate-200 bg-white p-4">
-                  <p className="text-sm leading-6 text-slate-700">{testimonial.quote}</p>
-                  <p className="mt-3 text-sm font-semibold text-slate-950">{testimonial.author}</p>
-                  <p className="text-xs text-slate-500">{testimonial.role}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:-translate-y-0.5"
-            >
-              Talk to our team
-            </Link>
-            <Link
-              href="/properties"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-            >
-              Browse properties
-            </Link>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
