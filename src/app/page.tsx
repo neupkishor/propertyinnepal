@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PropertyCardS1 from "@/components/estate/propertyCard.s1";
 import { testimonials } from "@/lib/site";
 import { fetchPremiumProperties, type PropertyFeature } from "@/lib/property-api";
 
@@ -9,24 +10,6 @@ const quickCategories = [
   "Commercial",
   "Land / Plots",
   "Rental Ready",
-] as const;
-
-const propertyCollections = [
-  {
-    name: "Premium Lalitpur Homes",
-    details: "Handpicked homes in high-demand neighborhoods with strong resale value.",
-    count: "42 listings",
-  },
-  {
-    name: "Investor Picks",
-    details: "High-yield apartments and mixed-use spaces with rental-demand focus.",
-    count: "29 listings",
-  },
-  {
-    name: "Family Ready Properties",
-    details: "Move-in-ready homes near schools, hospitals, and daily essentials.",
-    count: "37 listings",
-  },
 ] as const;
 
 const teamNumbers = [
@@ -68,13 +51,16 @@ const clientReviews = [
   },
 ] as const;
 
-function formatListingPrice(price: string, onCalling: string) {
-  if (onCalling === "1") return "On Call";
-  return `NRS ${price}`;
+function getDisplayValue(value: string | null | undefined) {
+  const normalized = value?.trim();
+  return normalized && normalized.length > 0 ? normalized : "N/A";
 }
 
-function stripHtml(html: string) {
-  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+function formatListingPrice(price: string | undefined, onCalling: string | undefined) {
+  if (onCalling === "1") return "On Call";
+  const normalizedPrice = getDisplayValue(price);
+  if (normalizedPrice === "N/A") return normalizedPrice;
+  return `NRS ${normalizedPrice}`;
 }
 
 function getFeatureValue(
@@ -94,19 +80,18 @@ function getBedroomValue(features: PropertyFeature[] | undefined) {
   return getFeatureValue(features, [/bed/i, /bedroom/i]) ?? "N/A";
 }
 
-function getSpaceValue(area: string | undefined) {
-  const normalized = area?.trim();
-  return normalized && normalized.length > 0 ? normalized : "N/A";
+function getBathroomValue(features: PropertyFeature[] | undefined) {
+  return getFeatureValue(features, [/bath/i, /bathroom/i]) ?? "N/A";
 }
 
-function getPropertySummary(description: string, location: string, city: string, type: string) {
-  const cleaned = stripHtml(description);
+function getSpaceValue(area: string | undefined) {
+  return getDisplayValue(area);
+}
 
-  if (cleaned.length > 0) {
-    return cleaned;
-  }
-
-  return [type, location, city].filter(Boolean).join(" in ");
+function formatCountLabel(value: string, label: string) {
+  if (value === "N/A") return value;
+  if (/[a-z]/i.test(value)) return value;
+  return `${value} ${label}`;
 }
 
 export default async function Home() {
@@ -208,106 +193,69 @@ export default async function Home() {
 
       <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Featured Listings
-          </p>
-          <div className="mt-3 flex flex-wrap items-end gap-x-4 gap-y-3">
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
             <h2 className="font-display text-3xl leading-tight text-slate-950 sm:text-4xl lg:text-5xl">
-              Explore and browse our exclusive property listings
+              Premium Properties
             </h2>
             <Link
-              href="/properties"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-deep transition hover:text-brand"
+              href="/properties?listing=premium"
+              aria-label="View premium properties"
+              className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-950 shadow-sm transition hover:border-brand hover:text-brand focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
             >
-              View more
-              <span aria-hidden className="text-base leading-none">
-                →
-              </span>
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="size-5 fill-none stroke-current stroke-2"
+              >
+                <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </Link>
           </div>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-            Handpicked properties from our current live inventory with better visuals,
-            cleaner details, and faster paths to the listing page.{" "}
-            <Link href="/properties" className="font-semibold text-brand-deep hover:text-brand">
-              View more
-            </Link>
+            The best properties for your premium lifestyle.
           </p>
         </div>
 
-        <div className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-4">
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
           {homepageFeaturedListings.map((property) => {
             const bedroomValue = getBedroomValue(property.features);
+            const bathroomValue = getBathroomValue(property.features);
+            const title = getDisplayValue(property.name);
+            const propertyType = getDisplayValue(property.type);
+            const location = [property.location, property.city]
+              .map((value) => value?.trim())
+              .filter(Boolean)
+              .join(", ");
+            const price = formatListingPrice(property.price, property.on_calling);
+            const propertyHref = property.slug?.trim()
+              ? `/properties/${property.slug}`
+              : undefined;
 
             return (
-              <article
+              <div
                 key={property.id}
-                className="min-w-[84%] snap-start sm:min-w-[48%] md:min-w-0"
+                className="min-w-0"
               >
-                <Link
-                  href={`/properties/${property.slug}`}
-                  className="group block"
-                >
-                  <div className="overflow-hidden rounded-[1.75rem] bg-slate-100">
-                    <img
-                      src={property.images?.[0] ?? "/logo.png"}
-                      alt={property.name}
-                      width={960}
-                      height={640}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-64 w-full object-cover object-center transition duration-500 group-hover:scale-[1.08]"
-                    />
-                  </div>
-
-                  <div className="mt-5">
-                    <div>
-                      <h3 className="text-xl font-semibold leading-tight text-slate-950 sm:text-[1.35rem]">
-                        {property.name}
-                      </h3>
-                      <p className="mt-2 text-lg font-semibold leading-none text-slate-950 sm:text-xl">
-                        {formatListingPrice(property.price, property.on_calling)}
-                      </p>
-                    </div>
-
-                    <p className="mt-3 line-clamp-2 text-base leading-7 text-slate-600">
-                      {getPropertySummary(
-                        property.description,
-                        property.location,
-                        property.city,
-                        property.type,
-                      )}
-                    </p>
-
-                    <div className="mt-5 flex items-center justify-between gap-4 border-t border-slate-200 pt-4 text-sm text-slate-600">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-slate-500">Bedroom</span>
-                        <span>{bedroomValue === "N/A" ? "N/A" : bedroomValue}</span>
-                      </div>
-                      <div className="h-1 w-1 rounded-full bg-slate-300" />
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-slate-500">Space</span>
-                        <span>{getSpaceValue(property.area)}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </article>
+                <PropertyCardS1
+                  className="h-full"
+                  href={propertyHref}
+                  imageAlt={title}
+                  imageSrc={property.images?.[0] ?? "/logo.png"}
+                  agentImageSrc={property.team_image}
+                  title={title}
+                  status={getDisplayValue(property.for)}
+                  price={price}
+                  priceTag={price}
+                  propertyType={propertyType}
+                  location={location || "N/A"}
+                  bedroomLabel={formatCountLabel(bedroomValue, "Beds")}
+                  bathroomLabel={formatCountLabel(bathroomValue, "Baths")}
+                  areaLabel={getSpaceValue(property.area)}
+                />
+              </div>
             );
           })}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
-        <div className="grid gap-5 md:grid-cols-3">
-          {propertyCollections.map((collection) => (
-            <article key={collection.name} className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-                {collection.count}
-              </p>
-              <h3 className="mt-3 font-display text-2xl text-slate-950">{collection.name}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{collection.details}</p>
-            </article>
-          ))}
         </div>
       </section>
 

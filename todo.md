@@ -1,2 +1,3 @@
 - [ ] Add documentation for `src/app/about/team/page.tsx` following the Neup documentation standard.
 - [ ] Investigate why `https://api.propertyinnepal.com.np/api/V1/filter-properties/...` returns empty results for known sale/rent inventory and replace the temporary app-side filtering workaround.
+- [ ] Replace page-level `<img>` elements with `next/image` or an approved image loader to clear Next.js lint optimization warnings.
