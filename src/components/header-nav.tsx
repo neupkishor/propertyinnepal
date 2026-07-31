@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import type { NavigationItem } from "@/lib/site";
 
 type HeaderNavProps = {
@@ -11,16 +11,31 @@ type HeaderNavProps = {
 
 export function HeaderNav({ items }: HeaderNavProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentSearch = searchParams.toString();
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const [openMenuHref, setOpenMenuHref] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedHref, setMobileExpandedHref] = useState<string | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
+  const itemRefs = useRef<Record<string, HTMLDivElement | HTMLAnchorElement | null>>({});
 
-  const isLinkActive = (href: string) =>
-    href === "/"
+  const isLinkActive = (href: string) => {
+    const target = new URL(href, "https://propertyinnepal.local");
+    const targetSearchEntries = Array.from(target.searchParams.entries());
+
+    if (targetSearchEntries.length > 0) {
+      const currentSearchParams = new URLSearchParams(currentSearch);
+      return (
+        pathname === target.pathname &&
+        targetSearchEntries.every(([key, value]) => currentSearchParams.get(key) === value)
+      );
+    }
+
+    return target.pathname === "/"
       ? pathname === "/"
-      : pathname === href || pathname.startsWith(`${href}/`);
+      : pathname === target.pathname || pathname.startsWith(`${target.pathname}/`);
+  };
 
   const isItemActive = (item: NavigationItem): boolean =>
     isLinkActive(item.href) || item.children?.some(isItemActive) === true;
@@ -33,11 +48,13 @@ export function HeaderNav({ items }: HeaderNavProps) {
   const moveHighlightTo = (href: string) => {
     const nav = navRef.current;
     if (!nav) return;
-    const el = nav.querySelector<HTMLElement>(`[data-nav-item="${href}"]`);
+    const el = itemRefs.current[href];
     if (!el) return;
+    const navRect = nav.getBoundingClientRect();
+    const itemRect = el.getBoundingClientRect();
 
-    nav.style.setProperty("--nav-pill-left", `${el.offsetLeft}px`);
-    nav.style.setProperty("--nav-pill-width", `${el.offsetWidth}px`);
+    nav.style.setProperty("--nav-pill-left", `${itemRect.left - navRect.left}px`);
+    nav.style.setProperty("--nav-pill-width", `${itemRect.width}px`);
   };
 
   useEffect(() => {
@@ -129,12 +146,11 @@ export function HeaderNav({ items }: HeaderNavProps) {
             >
               {hasChildren ? (
                 <>
-                  <button
-                    type="button"
-                    data-nav-item={item.href}
-                    aria-current={isActive ? "page" : undefined}
-                    aria-expanded={isMenuOpen}
-                    className={`relative z-10 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-colors duration-200 focus-visible:outline-none ${
+                  <div
+                    ref={(element) => {
+                      itemRefs.current[item.href] = element;
+                    }}
+                    className={`relative z-10 inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm transition-colors duration-200 ${
                       isActive
                         ? "font-bold text-slate-950"
                         : isHighlighted
@@ -142,22 +158,38 @@ export function HeaderNav({ items }: HeaderNavProps) {
                           : "font-medium text-slate-600 hover:text-slate-950"
                     }`}
                   >
-                    {item.label}
-                    <svg
-                      aria-hidden
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      className={`size-4 transition-transform duration-200 ${isMenuOpen ? "rotate-180" : ""}`}
+                    <Link
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      className="focus-visible:outline-none"
                     >
-                      <path
-                        d="M5 7.5L10 12.5L15 7.5"
-                        stroke="currentColor"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
+                      {item.label}
+                    </Link>
+                    <button
+                      type="button"
+                      aria-label={`Open ${item.label} menu`}
+                      aria-expanded={isMenuOpen}
+                      className="rounded-full p-0.5 focus-visible:outline-none"
+                      onClick={() =>
+                        setOpenMenuHref((current) => (current === item.href ? null : item.href))
+                      }
+                    >
+                      <svg
+                        aria-hidden
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        className={`size-4 transition-transform duration-200 ${isMenuOpen ? "rotate-180" : ""}`}
+                      >
+                        <path
+                          d="M5 7.5L10 12.5L15 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
 
                   <div
                     className={`absolute left-0 top-full z-30 pt-4 transition duration-200 ${
@@ -195,7 +227,9 @@ export function HeaderNav({ items }: HeaderNavProps) {
               ) : (
                 <Link
                   href={item.href}
-                  data-nav-item={item.href}
+                  ref={(element) => {
+                    itemRefs.current[item.href] = element;
+                  }}
                   aria-current={isActive ? "page" : undefined}
                   className={`relative z-10 rounded-lg px-4 py-2 text-sm transition-colors duration-200 focus-visible:outline-none ${
                     isActive
@@ -252,32 +286,43 @@ export function HeaderNav({ items }: HeaderNavProps) {
 
             return (
               <div key={item.href} className="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-2">
-                <button
-                  type="button"
-                  aria-expanded={isExpanded}
-                  onClick={() =>
-                    setMobileExpandedHref((current) => (current === item.href ? null : item.href))
-                  }
-                  className={`flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left text-sm transition ${
+                <div
+                  className={`flex items-center justify-between gap-3 rounded-2xl px-3 py-3 text-left text-sm transition ${
                     isActive ? "text-slate-950" : "text-slate-700"
                   }`}
                 >
-                  <span className="font-semibold">{item.label}</span>
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className={`size-5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="min-w-0 flex-1 font-semibold"
                   >
-                    <path
-                      d="M5 7.5L10 12.5L15 7.5"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+                    {item.label}
+                  </Link>
+                  <button
+                    type="button"
+                    aria-label={`Open ${item.label} menu`}
+                    aria-expanded={isExpanded}
+                    onClick={() =>
+                      setMobileExpandedHref((current) => (current === item.href ? null : item.href))
+                    }
+                    className="rounded-full p-1"
+                  >
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      className={`size-5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                    >
+                      <path
+                        d="M5 7.5L10 12.5L15 7.5"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
 
                 <div className={`grid overflow-hidden transition-all duration-300 ${isExpanded ? "grid-rows-[1fr] pt-2" : "grid-rows-[0fr]"}`}>
                   <div className="min-h-0">

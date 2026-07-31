@@ -2,19 +2,18 @@ import type { Metadata } from "next";
 import { PropertyListingsPage } from "@/components/property-listings-page";
 import { fetchPropertyListings, type ListingPagePayload } from "@/lib/property-api";
 
-export const metadata: Metadata = {
-  title: "Properties",
-  description:
-    "Browse live properties from Property in Nepal with current listings and details.",
-};
-
-type PropertiesPageProps = {
+type BuyPageProps = {
   searchParams?: Promise<{
     page?: string;
   }>;
 };
 
-export default async function PropertiesPage({ searchParams }: PropertiesPageProps) {
+export const metadata: Metadata = {
+  title: "Buy",
+  description: "Browse properties available to buy from Property in Nepal.",
+};
+
+export default async function BuyPage({ searchParams }: BuyPageProps) {
   const resolvedSearchParams = (await searchParams) ?? {};
   const page = Math.max(1, Number(resolvedSearchParams.page ?? "1") || 1);
   let listings: ListingPagePayload = {
@@ -26,18 +25,18 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
   let loadError = false;
 
   try {
-    listings = await fetchPropertyListings({ page });
+    listings = await fetchPropertyListings({ page, purpose: "buy" });
   } catch {
     loadError = true;
   }
 
   return (
     <PropertyListingsPage
-      buildPageHref={(nextPage) => `/properties?page=${nextPage}`}
-      emptyMessage="No properties found right now."
-      heading="Live property listings from Property in Nepal"
-      intro="Browse current inventory and open any listing to view complete property details, features, and media."
-      listingsLabel="Properties"
+      buildPageHref={(nextPage) => `/buy?page=${nextPage}`}
+      emptyMessage="No buy listings found right now."
+      heading="Properties available to buy"
+      intro="Browse sale inventory across all categories, then open any listing to view its complete details."
+      listingsLabel="Buy"
       loadError={loadError}
       page={listings.currentPage}
       pageCount={listings.totalPages}

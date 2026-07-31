@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Outfit } from "next/font/google";
 import { HeaderNav } from "@/components/header-nav";
 import { navigation } from "@/lib/site";
@@ -49,12 +50,14 @@ export default function RootLayout({
                     Property in Nepal
                   </span>
                   <span className="hidden text-xs font-medium text-brand sm:block">
-                    Perfect place for property solution
+                    घर किन्दा सम्झिनु ल !
                   </span>
                 </span>
               </Link>
 
-              <HeaderNav items={navigation} />
+              <Suspense>
+                <HeaderNav items={navigation} />
+              </Suspense>
 
               <Link
                 href="/contact"
@@ -83,12 +86,10 @@ export default function RootLayout({
                 <p className="text-sm font-semibold text-slate-950">Explore</p>
                 <div className="mt-4 grid gap-3 text-sm text-slate-600">
                   {navigation.map((item) => {
-                    const target = item.children?.[0] ?? item;
-
                     return (
                       <Link
                         key={item.label}
-                        href={target.href}
+                        href={item.href}
                         className="w-fit transition hover:text-slate-950"
                       >
                         {item.label}

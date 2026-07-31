@@ -38,6 +38,13 @@ export type PropertyItem = {
   team_image: string | null;
 };
 
+export type ListingPagePayload = {
+  items: PropertyItem[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+};
+
 type SearchResponse = {
   data: PropertyItem[];
   meta?: {
@@ -95,6 +102,13 @@ type BlogsResponse = {
 };
 
 const API_BASE = "https://api.propertyinnepal.com.np/api/V1";
+const SEARCH_PAGE_SIZE = 9;
+
+type FilterPropertyListingsArgs = {
+  categorySlug?: import("@/lib/property-taxonomy").PropertyCategorySlug;
+  page: number;
+  purpose?: import("@/lib/property-taxonomy").PurposeSlug;
+};
 
 export async function fetchProperties(page: number) {
   const response = await fetch(`${API_BASE}/search?page=${page}`, {
@@ -111,6 +125,47 @@ export async function fetchProperties(page: number) {
   }
 
   return (await response.json()) as SearchResponse;
+}
+
+export async function fetchPropertyListings({
+  categorySlug,
+  page,
+  purpose,
+}: FilterPropertyListingsArgs): Promise<ListingPagePayload> {
+  const firstPage = await fetchProperties(1);
+  const firstPageItems = firstPage.data ?? [];
+  const lastPage = Math.max(1, firstPage.meta?.last_page ?? 1);
+
+  const remainingPages =
+    lastPage > 1
+      ? await Promise.all(
+          Array.from({ length: lastPage - 1 }, (_, index) => fetchProperties(index + 2)),
+        )
+      : [];
+
+  const allItems = [...firstPageItems, ...remainingPages.flatMap((response) => response.data ?? [])];
+  const { getPurposeApiValue, matchesPropertyCategory } = await import("@/lib/property-taxonomy");
+
+  const filteredItems = allItems.filter((property) => {
+    const matchesPurpose = purpose ? property.for === getPurposeApiValue(purpose) : true;
+    const matchesCategory = categorySlug
+      ? matchesPropertyCategory(property.type, categorySlug)
+      : true;
+
+    return matchesPurpose && matchesCategory;
+  });
+
+  const totalItems = filteredItems.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / SEARCH_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const start = (currentPage - 1) * SEARCH_PAGE_SIZE;
+
+  return {
+    items: filteredItems.slice(start, start + SEARCH_PAGE_SIZE),
+    currentPage,
+    totalItems,
+    totalPages,
+  };
 }
 
 export async function fetchPropertyBySlug(slug: string) {

@@ -1,1 +1,2 @@
 - [ ] Add documentation for `src/app/about/team/page.tsx` following the Neup documentation standard.
+- [ ] Investigate why `https://api.propertyinnepal.com.np/api/V1/filter-properties/...` returns empty results for known sale/rent inventory and replace the temporary app-side filtering workaround.

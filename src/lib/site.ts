@@ -6,39 +6,27 @@ export type NavigationItem = {
 
 export const navigation: NavigationItem[] = [
   {
-    href: "/properties?purpose=buy",
+    href: "/buy",
     label: "Buy",
     children: [
-      { href: "/properties?purpose=buy&type=house", label: "House" },
-      { href: "/properties?purpose=buy&type=colony-house", label: "Colony House" },
-      { href: "/properties?purpose=buy&type=land", label: "Land" },
-      { href: "/properties?purpose=buy&type=apartment", label: "Apartment" },
-      {
-        href: "/properties?purpose=buy&type=commercial-property",
-        label: "Commercial Property",
-      },
-      {
-        href: "/properties?purpose=buy&type=semi-commercial-property",
-        label: "Semi Commercial Property",
-      },
+      { href: "/buy/house", label: "House" },
+      { href: "/buy/land", label: "Land" },
+      { href: "/buy/commercial", label: "Commercial" },
+      { href: "/buy/semi-commercial", label: "Semi Commercial" },
+      { href: "/buy/apartment", label: "Apartment" },
+      { href: "/buy/colony-house", label: "Colony House" },
     ],
   },
   {
-    href: "/properties?purpose=rent",
+    href: "/rent",
     label: "Rent",
     children: [
-      { href: "/properties?purpose=rent&type=house", label: "House" },
-      { href: "/properties?purpose=rent&type=colony-house", label: "Colony House" },
-      { href: "/properties?purpose=rent&type=land", label: "Land" },
-      { href: "/properties?purpose=rent&type=apartment", label: "Apartment" },
-      {
-        href: "/properties?purpose=rent&type=commercial-property",
-        label: "Commercial Property",
-      },
-      {
-        href: "/properties?purpose=rent&type=semi-commercial-property",
-        label: "Semi Commercial Property",
-      },
+      { href: "/rent/house", label: "House" },
+      { href: "/rent/land", label: "Land" },
+      { href: "/rent/commercial", label: "Commercial" },
+      { href: "/rent/semi-commercial", label: "Semi Commercial" },
+      { href: "/rent/apartment", label: "Apartment" },
+      { href: "/rent/colony-house", label: "Colony House" },
     ],
   },
   { href: "/properties?media=video", label: "Videos" },
