@@ -136,7 +136,7 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.88)_0%,rgba(2,6,23,0.6)_42%,rgba(2,6,23,0.12)_75%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.8)_0%,transparent_55%)]" />
 
-        <div className="relative mx-auto flex w-full max-w-7xl items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
+        <div className="relative mx-auto flex w-full max-w-[1440px] items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
           <div className="max-w-3xl">
             <p className="inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.08em] text-white backdrop-blur-md">
               Find your next home in Nepal
@@ -193,7 +193,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
+      <section className="mx-auto max-w-[1440px] px-6 py-8 lg:px-8 lg:py-10">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {quickCategories.map((category) => (
             <article
@@ -206,7 +206,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
             Featured Listings
@@ -297,7 +297,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <div className="grid gap-5 md:grid-cols-3">
           {propertyCollections.map((collection) => (
             <article key={collection.name} className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
@@ -311,7 +311,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
             Team Strength
@@ -330,7 +330,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -354,7 +354,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <div className="grid gap-6 md:grid-cols-3">
           {clientReviews.map((review) => (
             <figure key={review.author} className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
@@ -370,7 +370,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:pb-20">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8 lg:pb-20">
         <div className="grid gap-6 rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f0f7ff)] p-6 shadow-sm sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">

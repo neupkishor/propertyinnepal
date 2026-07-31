@@ -37,7 +37,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
 
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
         <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             Blog
@@ -55,7 +55,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
         </article>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-10 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-10 lg:px-8">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
           <img
             src={blog.banner}

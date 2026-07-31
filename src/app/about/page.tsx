@@ -48,7 +48,7 @@ const howItWorks = [
 export default function AboutPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 shadow-sm sm:px-8 lg:px-10">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             About Us
@@ -73,7 +73,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8">
         <div className="grid gap-5 md:grid-cols-2">
           <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-deep/75">
@@ -97,7 +97,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8">
         <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             Message From CEO
@@ -118,7 +118,7 @@ export default function AboutPage() {
         </article>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
@@ -146,7 +146,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-8 lg:pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 pb-16 lg:px-8 lg:pb-24">
         <div className="rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f5f9ff)] px-6 py-10 shadow-sm sm:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             Our Team

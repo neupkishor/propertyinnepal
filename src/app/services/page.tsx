@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-16 pt-12 lg:px-8 lg:pt-16">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-deep/70">
             Services
@@ -28,7 +28,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <SectionHeading
           eyebrow="Core services"
           title="Focus on the deal, not the clutter around it."
@@ -55,7 +55,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 py-16 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <SectionHeading
             eyebrow="How it works"
@@ -82,7 +82,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 py-16 lg:px-8 lg:pb-24">
         <div className="rounded-[2rem] bg-[linear-gradient(135deg,#0f172a,#1f3b7b)] px-6 py-10 text-white shadow-[0_30px_80px_rgba(31,59,123,0.18)] sm:px-10">
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>

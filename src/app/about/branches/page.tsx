@@ -42,7 +42,7 @@ const contact = {
 export default function BranchesPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 shadow-sm sm:px-8 lg:px-10">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             Our Branches
@@ -57,7 +57,7 @@ export default function BranchesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8 lg:pb-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8 lg:pb-16">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {branches.map((branch) => (
             <article
@@ -96,7 +96,7 @@ export default function BranchesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-8 lg:pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 pb-16 lg:px-8 lg:pb-24">
         <div className="rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f5f9ff)] px-6 py-10 shadow-sm sm:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-deep/75">
             Main Contact

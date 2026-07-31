@@ -50,7 +50,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-deep/70">
             Property Details
@@ -76,7 +76,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8">
         <div className="grid gap-3 md:grid-cols-2">
           {property.images?.map((image, index) => (
             <div
@@ -97,7 +97,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8 lg:pb-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8 lg:pb-16">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-semibold text-slate-950">Description</h2>
@@ -127,7 +127,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8 lg:pb-20">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8 lg:pb-20">
         <div className="grid gap-6 md:grid-cols-2">
           <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-semibold text-slate-950">Features</h2>
@@ -161,7 +161,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-8 lg:pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 pb-16 lg:px-8 lg:pb-24">
         <div className="flex flex-wrap gap-3">
           <Link
             href="/properties"

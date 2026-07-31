@@ -30,7 +30,7 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
 
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-deep/70">
             Properties
@@ -45,7 +45,7 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-12 lg:px-8 lg:pb-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8 lg:pb-16">
         {properties.length === 0 ? (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-600">
             No properties found right now.

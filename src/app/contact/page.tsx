@@ -28,7 +28,7 @@ const contactPoints = [
 export default function ContactPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
+      <section className="mx-auto max-w-[1440px] px-6 pb-12 pt-12 lg:px-8 lg:pt-16">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-deep/70">
             Contact
@@ -43,7 +43,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-12">
+      <section className="mx-auto grid max-w-[1440px] gap-8 px-6 py-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-12">
         <div className="grid gap-4">
           {contactPoints.map((point) => (
             <a
