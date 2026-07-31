@@ -3,8 +3,10 @@ import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import PropertyCardS1 from "@/components/estate/propertyCard.s1";
 import { testimonials } from "@/lib/site";
 import {
+  fetchBlogs,
   fetchPremiumProperties,
   fetchPropertyListings,
+  type BlogItem,
   type PropertyFeature,
   type PropertyItem,
 } from "@/lib/property-api";
@@ -327,11 +329,104 @@ function PremiumPropertyCard({
   );
 }
 
+function BlogPreviewCard({ blog }: { blog: BlogItem }) {
+  return (
+    <article className="group/blog flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(31,59,123,0.035)] transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <Link href={`/blog/${blog.slug}`} className="block overflow-hidden bg-slate-100">
+        <img
+          src={blog.banner}
+          alt={blog.title}
+          width={900}
+          height={560}
+          loading="lazy"
+          decoding="async"
+          className="aspect-[1.55] w-full object-cover transition duration-500 group-hover/blog:scale-[1.03]"
+        />
+      </Link>
+
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+          <span>{blog.created_at_human ?? blog.created_at}</span>
+          <span aria-hidden="true">•</span>
+          <span>{blog.views} views</span>
+        </div>
+
+        <h3 className="mt-3 line-clamp-3 text-lg font-bold leading-snug text-slate-950">
+          <Link
+            href={`/blog/${blog.slug}`}
+            className="transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+          >
+            {blog.title}
+          </Link>
+        </h3>
+
+        <p className="mt-3 text-sm text-slate-600">
+          By {blog.author?.name ?? "Property in Nepal"}
+        </p>
+
+        <Link
+          href={`/blog/${blog.slug}`}
+          className="mt-auto inline-flex w-fit items-center gap-2 pt-5 text-sm font-semibold text-brand-deep transition hover:text-brand focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+        >
+          Read article
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="size-4 fill-none stroke-current stroke-2"
+          >
+            <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+function LinkedSectionTitle({
+  ariaLabel,
+  href,
+  title,
+}: {
+  ariaLabel: string;
+  href: string;
+  title: string;
+}) {
+  return (
+    <h2 className="section-title-link-group flex flex-wrap items-baseline gap-3 font-display text-[1.4rem] font-bold leading-tight text-slate-950 sm:text-[1.85rem] lg:text-[2.05rem]">
+      <Link
+        href={href}
+        className="section-title-text-link inline-flex text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+      >
+        <span className="section-title-underline">{title}</span>
+      </Link>
+      <Link
+        href={href}
+        aria-label={ariaLabel}
+        className="section-title-icon-link inline-flex h-[1em] items-center text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+      >
+        <span aria-hidden="true" className="section-title-chevron">
+          <svg
+            viewBox="0 0 24 24"
+            className="size-[0.68em] fill-none stroke-current stroke-[2.5]"
+          >
+            <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </Link>
+    </h2>
+  );
+}
+
 export default async function Home() {
-  const premiumPayload = await fetchPremiumProperties(1);
-  const recentPayload = await fetchPropertyListings({ page: 1 });
+  const [premiumPayload, recentPayload, blogsPayload] = await Promise.all([
+    fetchPremiumProperties(1),
+    fetchPropertyListings({ page: 1 }),
+    fetchBlogs(1),
+  ]);
   const premiumListings = premiumPayload.data ?? [];
   const recentListings = recentPayload.items ?? [];
+  const latestBlogs = (blogsPayload.data ?? []).slice(0, 3);
   const featuredListings = premiumListings
     .filter((property) => property.is_featured === "1")
     .slice(0, 8);
@@ -454,31 +549,11 @@ export default async function Home() {
       <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
         <div className="max-w-3xl">
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
-            <h2 className="flex flex-wrap items-baseline gap-3 font-display text-[1.4rem] font-bold leading-tight text-slate-950 sm:text-[1.85rem] lg:text-[2.05rem]">
-              <Link
-                href="/properties?listing=premium"
-                className="premium-properties-title-link inline-flex text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
-              >
-                <span className="premium-properties-underline">Premium Properties</span>
-              </Link>
-              <Link
-                href="/properties?listing=premium"
-                aria-label="View premium properties"
-                className="premium-properties-link inline-flex h-[1em] items-center text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
-              >
-                <span
-                  aria-hidden="true"
-                  className="premium-properties-chevron premium-properties-underline"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="size-[0.68em] fill-none stroke-current stroke-[2.5]"
-                  >
-                    <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </Link>
-            </h2>
+            <LinkedSectionTitle
+              href="/properties?listing=premium"
+              title="Premium Properties"
+              ariaLabel="View premium properties"
+            />
           </div>
           <p className="mt-0.5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
             The best properties for your premium lifestyle.
@@ -529,31 +604,11 @@ export default async function Home() {
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
           <div className="max-w-3xl">
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
-              <h2 className="flex flex-wrap items-baseline gap-3 font-display text-[1.4rem] font-bold leading-tight text-slate-950 sm:text-[1.85rem] lg:text-[2.05rem]">
-                <Link
-                  href="/properties"
-                  className="premium-properties-title-link inline-flex text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
-                >
-                  <span className="premium-properties-underline">Recent Properties</span>
-                </Link>
-                <Link
-                  href="/properties"
-                  aria-label="View recent properties"
-                  className="premium-properties-link inline-flex h-[1em] items-center text-slate-950 transition-colors duration-300 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="premium-properties-chevron premium-properties-underline"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="size-[0.68em] fill-none stroke-current stroke-[2.5]"
-                    >
-                      <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                </Link>
-              </h2>
+              <LinkedSectionTitle
+                href="/properties"
+                title="Recent Properties"
+                ariaLabel="View recent properties"
+              />
             </div>
             <p className="mt-0.5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
               Freshly added properties from the latest live inventory.
@@ -717,6 +772,29 @@ export default async function Home() {
           </DragScrollCarousel>
         </div>
       </section>
+
+      {latestBlogs.length > 0 ? (
+        <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
+          <div className="max-w-3xl">
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
+              <LinkedSectionTitle
+                href="/blogs"
+                title="Latest Blogs"
+                ariaLabel="View latest blogs"
+              />
+            </div>
+            <p className="mt-0.5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+              Fresh real estate guidance, market updates, and property insights.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {latestBlogs.map((blog) => (
+              <BlogPreviewCard key={blog.id} blog={blog} />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-8">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
