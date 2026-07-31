@@ -48,6 +48,12 @@ const footerSocialLinks = [
   },
 ] as const;
 
+const footerTools = [
+  { label: "EMI Calculator", href: "/tools/emi-calculator" },
+  { label: "Calendar", href: "/tools/calendar" },
+  { label: "Unit Converter", href: "/tools/unit-converter" },
+] as const;
+
 function SocialIcon({ icon }: { icon: (typeof footerSocialLinks)[number]["icon"] }) {
   if (icon === "facebook") {
     return (
@@ -141,9 +147,9 @@ export default function RootLayout({
           <main className="flex-1 pt-[88px]">{children}</main>
 
           <footer className="border-t border-brand/20 bg-brand-deep text-white">
-            <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-12 lg:grid-cols-[1.3fr_0.7fr_0.8fr] lg:px-8">
+            <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-12 md:grid-cols-2 lg:grid-cols-[1.25fr_0.65fr_0.65fr_0.9fr] lg:px-8">
               <div>
-                <Link href="/" className="flex w-fit items-center gap-3">
+                <Link href="/" className="inline-flex w-fit items-center gap-3">
                   <img
                     src="/logo.png"
                     alt="Property in Nepal logo"
@@ -196,6 +202,21 @@ export default function RootLayout({
                       </Link>
                     );
                   })}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-white">Tools</p>
+                <div className="mt-4 grid gap-3 text-sm text-white/75">
+                  {footerTools.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="w-fit transition hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
 
