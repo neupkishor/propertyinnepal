@@ -40,4 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# nextJs generations
 certificates
+
+# Neup Standard Files
+core
+neup.core
+logica
+neup.logica
