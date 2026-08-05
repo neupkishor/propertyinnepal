@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import PropertyCardS1 from "@/components/estate/propertyCard.s1";
+import { HeroBackgroundVideo } from "@/components/hero-background-video";
 import {
   fetchBlogs,
   fetchPremiumProperties,
@@ -415,24 +416,16 @@ export default async function Home() {
     featuredListings.length > 0 ? featuredListings : premiumListings.slice(0, 8);
   const premiumPreviewListings = homepageFeaturedListings.slice(0, 4);
   const recentPreviewListings = recentListings.slice(0, 4);
-  const heroPremium = premiumListings[0];
-  const heroImage =
-    heroPremium?.images?.[0] ??
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=90";
 
   return (
     <>
       <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white">
-        <img
-          src={heroImage}
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
+        <HeroBackgroundVideo
+          src="/hero-video.mp4"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.88)_0%,rgba(2,6,23,0.6)_42%,rgba(2,6,23,0.12)_75%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.8)_0%,transparent_55%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.78)_0%,rgba(2,6,23,0.5)_42%,rgba(2,6,23,0.08)_75%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.68)_0%,transparent_55%)]" />
 
         <div className="relative mx-auto flex w-full max-w-[1440px] items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
           <div className="max-w-3xl">
