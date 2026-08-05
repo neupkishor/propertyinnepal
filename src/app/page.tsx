@@ -441,7 +441,7 @@ export default async function Home() {
             </p>
 
             <h1 className="mt-6 font-display text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:text-4xl lg:text-6xl">
-              Find the right property without the usual chaos.
+              घर किन्दा सम्झिनु ल !
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
               Verified listings, serious seller inventory, and pricing clarity in NRS.
