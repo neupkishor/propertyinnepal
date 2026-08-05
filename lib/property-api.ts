@@ -1,3 +1,5 @@
+import { logica } from "@/logica";
+
 export type PropertyFeature = {
   name: string;
   value: string;
@@ -101,339 +103,310 @@ type BlogsResponse = {
   };
 };
 
-const API_BASE = "https://api.propertyinnepal.com.np/api/V1";
-const SEARCH_PAGE_SIZE = 9;
-
 type FilterPropertyListingsArgs = {
   categorySlug?: import("@/lib/property-taxonomy").PropertyCategorySlug;
   page: number;
   purpose?: import("@/lib/property-taxonomy").PurposeSlug;
 };
 
-const samplePropertyImages = [
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
-  "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=85",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
-  "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&w=1400&q=85",
-] as const;
+type BridgeRecord = Record<string, unknown>;
 
-const sampleAdvisorImage =
-  "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=320&q=85";
+const API_BASE = "https://api.propertyinnepal.com.np/api/V1";
+const SEARCH_PAGE_SIZE = 9;
+const PREMIUM_PAGE_SIZE = 9;
 
-const sampleProperties: PropertyItem[] = [
-  {
-    id: "sample-property-1",
-    slug: "sample-apartment-for-rent-sanepa",
-    code: "PIN-S001",
-    type: "Apartment",
-    for: "rent",
-    name: "2 BHK Apartment For Rent",
-    area: "1,916 sq.ft",
-    location: "Sanepa",
-    city: "Lalitpur",
-    price: "55,000",
-    views: "428",
-    description:
-      "<p>Bright apartment with open living, modern kitchen, balcony access, and easy access to Ring Road.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "1",
-    is_premium: "1",
-    features: [
-      { name: "Bedrooms", value: "2" },
-      { name: "Bathrooms", value: "1" },
-    ],
-    facilities: [
-      { name: "Parking", value: "1 car" },
-      { name: "Water", value: "24 hours" },
-      { name: "Security", value: "Yes" },
-    ],
-    created_at: "2026-07-01",
-    created_at_human: "Listed 4 weeks ago",
-    images: [samplePropertyImages[0], samplePropertyImages[1]],
-    on_calling: "0",
-    team: {
-      id: "advisor-1",
-      name: "Ramesh Shrestha",
-      position: "Senior Advisor",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-2",
-    slug: "sample-house-for-sale-bhaktapur",
-    code: "PIN-S002",
-    type: "House",
-    for: "sale",
-    name: "House For Sale Bhaktapur",
-    area: "20 Aana",
-    location: "Bode",
-    city: "Bhaktapur",
-    price: "16 Crore 99 Lakh",
-    views: "812",
-    description:
-      "<p>Premium independent house with landscaped outdoor space, wide road access, and multiple family living zones.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "1",
-    is_premium: "1",
-    features: [
-      { name: "Bedrooms", value: "5" },
-      { name: "Bathrooms", value: "4" },
-    ],
-    facilities: [
-      { name: "Parking", value: "4 cars" },
-      { name: "Garden", value: "Yes" },
-      { name: "Road", value: "20 ft" },
-    ],
-    created_at: "2026-07-03",
-    created_at_human: "Listed 4 weeks ago",
-    images: [samplePropertyImages[1], samplePropertyImages[2]],
-    on_calling: "0",
-    team: {
-      id: "advisor-1",
-      name: "Ramesh Shrestha",
-      position: "Senior Advisor",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-3",
-    slug: "sample-family-home-for-sale-bhaisepati",
-    code: "PIN-S003",
-    type: "House",
-    for: "sale",
-    name: "Family Home In Bhaisepati",
-    area: "6 Aana",
-    location: "Bhaisepati",
-    city: "Lalitpur",
-    price: "4 Crore 75 Lakh",
-    views: "391",
-    description:
-      "<p>Move-in-ready family home in a quiet residential pocket with practical room sizes and parking.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "1",
-    is_premium: "1",
-    features: [
-      { name: "Bedrooms", value: "4" },
-      { name: "Bathrooms", value: "3" },
-    ],
-    facilities: [
-      { name: "Parking", value: "2 cars" },
-      { name: "Solar", value: "Yes" },
-    ],
-    created_at: "2026-07-05",
-    created_at_human: "Listed 3 weeks ago",
-    images: [samplePropertyImages[2], samplePropertyImages[3]],
-    on_calling: "0",
-    team: {
-      id: "advisor-2",
-      name: "Sapana Karki",
-      position: "Property Consultant",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-4",
-    slug: "sample-luxury-apartment-for-sale-naxal",
-    code: "PIN-S004",
-    type: "Apartment",
-    for: "sale",
-    name: "Luxury Apartment In Naxal",
-    area: "1,450 sq.ft",
-    location: "Naxal",
-    city: "Kathmandu",
-    price: "2 Crore 15 Lakh",
-    views: "534",
-    description:
-      "<p>High-floor apartment with city views, refined interiors, lift access, and dedicated parking.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "1",
-    is_premium: "1",
-    features: [
-      { name: "Bedrooms", value: "3" },
-      { name: "Bathrooms", value: "2" },
-    ],
-    facilities: [
-      { name: "Lift", value: "Yes" },
-      { name: "Parking", value: "1 car" },
-      { name: "Gym", value: "Yes" },
-    ],
-    created_at: "2026-07-08",
-    created_at_human: "Listed 3 weeks ago",
-    images: [samplePropertyImages[3], samplePropertyImages[0]],
-    on_calling: "0",
-    team: {
-      id: "advisor-2",
-      name: "Sapana Karki",
-      position: "Property Consultant",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-5",
-    slug: "sample-commercial-space-for-rent-kupondole",
-    code: "PIN-S005",
-    type: "Commercial",
-    for: "rent",
-    name: "Commercial Space In Kupondole",
-    area: "2,200 sq.ft",
-    location: "Kupondole",
-    city: "Lalitpur",
-    price: "2,25,000",
-    views: "219",
-    description:
-      "<p>Road-facing commercial floor suitable for office, showroom, or service business.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "0",
-    is_premium: "1",
-    features: [
-      { name: "Bedrooms", value: "N/A" },
-      { name: "Bathrooms", value: "2" },
-    ],
-    facilities: [
-      { name: "Parking", value: "Available" },
-      { name: "Road Access", value: "Main road" },
-    ],
-    created_at: "2026-07-10",
-    created_at_human: "Listed 3 weeks ago",
-    images: [samplePropertyImages[0], samplePropertyImages[2]],
-    on_calling: "0",
-    team: {
-      id: "advisor-3",
-      name: "Prakash Bista",
-      position: "Commercial Lead",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-6",
-    slug: "sample-land-for-sale-godawari",
-    code: "PIN-S006",
-    type: "Land",
-    for: "sale",
-    name: "Residential Land In Godawari",
-    area: "8 Aana",
-    location: "Godawari",
-    city: "Lalitpur",
-    price: "1 Crore 35 Lakh",
-    views: "304",
-    description:
-      "<p>Residential land parcel with peaceful surroundings and practical access for home construction.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "0",
-    is_premium: "0",
-    features: [
-      { name: "Bedrooms", value: "N/A" },
-      { name: "Bathrooms", value: "N/A" },
-    ],
-    facilities: [
-      { name: "Road", value: "13 ft" },
-      { name: "Facing", value: "South East" },
-    ],
-    created_at: "2026-07-12",
-    created_at_human: "Listed 2 weeks ago",
-    images: [samplePropertyImages[1]],
-    on_calling: "0",
-    team: {
-      id: "advisor-3",
-      name: "Prakash Bista",
-      position: "Commercial Lead",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-7",
-    slug: "sample-semi-commercial-property-for-sale-jawalakhel",
-    code: "PIN-S007",
-    type: "Semi Commercial",
-    for: "sale",
-    name: "Semi Commercial Property",
-    area: "5 Aana",
-    location: "Jawalakhel",
-    city: "Lalitpur",
-    price: "3 Crore 90 Lakh",
-    views: "178",
-    description:
-      "<p>Mixed-use property suitable for office-front operations with residential space above.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "0",
-    is_premium: "0",
-    features: [
-      { name: "Bedrooms", value: "3" },
-      { name: "Bathrooms", value: "3" },
-    ],
-    facilities: [
-      { name: "Parking", value: "1 car" },
-      { name: "Road", value: "16 ft" },
-    ],
-    created_at: "2026-07-14",
-    created_at_human: "Listed 2 weeks ago",
-    images: [samplePropertyImages[2]],
-    on_calling: "0",
-    team: {
-      id: "advisor-4",
-      name: "Nisha Maharjan",
-      position: "Listing Advisor",
-    },
-    team_image: sampleAdvisorImage,
-  },
-  {
-    id: "sample-property-8",
-    slug: "sample-colony-house-for-rent-imadol",
-    code: "PIN-S008",
-    type: "Colony House",
-    for: "rent",
-    name: "Colony House For Rent",
-    area: "4 Aana",
-    location: "Imadol",
-    city: "Lalitpur",
-    price: "85,000",
-    views: "246",
-    description:
-      "<p>Comfortable colony house in a managed community with parking, water, and family-friendly access.</p>",
-    youtube_link: null,
-    tiktok_link: null,
-    is_featured: "0",
-    is_premium: "0",
-    features: [
-      { name: "Bedrooms", value: "3" },
-      { name: "Bathrooms", value: "2" },
-    ],
-    facilities: [
-      { name: "Parking", value: "1 car" },
-      { name: "Security", value: "Community gate" },
-    ],
-    created_at: "2026-07-16",
-    created_at_human: "Listed 2 weeks ago",
-    images: [samplePropertyImages[3]],
-    on_calling: "0",
-    team: {
-      id: "advisor-4",
-      name: "Nisha Maharjan",
-      position: "Listing Advisor",
-    },
-    team_image: sampleAdvisorImage,
-  },
-];
+function asRecord(value: unknown): BridgeRecord {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as BridgeRecord : {};
+}
 
-export async function fetchProperties(page: number) {
-  const currentPage = Math.max(1, page);
-  const start = (currentPage - 1) * SEARCH_PAGE_SIZE;
-  const data = sampleProperties.slice(start, start + SEARCH_PAGE_SIZE);
+function asString(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "boolean") return value ? "1" : "0";
+  return "";
+}
+
+function asOptionalString(value: unknown): string | null {
+  const text = asString(value).trim();
+  return text ? text : null;
+}
+
+function asNumber(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value.replace(/,/g, ""));
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return null;
+}
+
+function asStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((entry) => {
+      if (typeof entry === "string") return entry;
+      const record = asRecord(entry);
+      return asString(record.url);
+    })
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function titleCase(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+}
+
+function firstText(value: unknown): string {
+  if (Array.isArray(value)) return asString(value[0]);
+  return asString(value);
+}
+
+function getSource(record: BridgeRecord): BridgeRecord {
+  const details = asRecord(record.details);
+  return asRecord(details.source);
+}
+
+function getLocation(record: BridgeRecord) {
+  const structuredLocation = asRecord(record.structuredLocation);
+  const location = asRecord(record.location);
+  const nestedStructured = asRecord(location.structured);
+  const source = getSource(record);
 
   return {
-    data,
+    location:
+      asString(record.location) ||
+      asString(location.text) ||
+      asString(structuredLocation.locality) ||
+      asString(nestedStructured.locality),
+    city:
+      asString(record.city) ||
+      asString(structuredLocation.city) ||
+      asString(nestedStructured.city) ||
+      asString(source.city),
+  };
+}
+
+function getPricingText(record: BridgeRecord) {
+  const source = getSource(record);
+  const pricing = record.pricing;
+
+  if (Array.isArray(pricing)) {
+    const first = asRecord(pricing[0]);
+    const basis = asString(first.basis);
+    if (basis) return basis;
+
+    const amount = asNumber(first.askingAmount);
+    if (amount && amount > 0) return amount.toLocaleString("en-US");
+  }
+
+  const pricingRecord = asRecord(pricing);
+  return (
+    asString(pricingRecord.raw) ||
+    asString(pricingRecord.basis) ||
+    asString(source.rawPrice) ||
+    asString(record.price && asNumber(record.price)?.toLocaleString("en-US")) ||
+    "On Call"
+  );
+}
+
+function getAreaText(record: BridgeRecord) {
+  const source = getSource(record);
+  const rawArea = asString(source.rawArea);
+  if (rawArea) return rawArea;
+
+  const area = asNumber(record.area);
+  const areaUnit = asString(record.areaUnit);
+  if (area && areaUnit) return `${area.toLocaleString("en-US")} ${areaUnit}`;
+  if (area) return area.toLocaleString("en-US");
+  return "N/A";
+}
+
+function mapFeatures(record: BridgeRecord): PropertyFeature[] {
+  const sourceFeatures = getSource(record).features;
+  if (Array.isArray(sourceFeatures)) {
+    return sourceFeatures
+      .map((feature) => {
+        const featureRecord = asRecord(feature);
+        return {
+          icon: asOptionalString(featureRecord.icon) ?? undefined,
+          name: asString(featureRecord.name),
+          value: asString(featureRecord.value),
+        };
+      })
+      .filter((feature) => feature.name && feature.value);
+  }
+
+  const details = asRecord(record.details);
+  const detailGroups = ["house", "apartment", "land", "flat", "space"]
+    .map((key) => asRecord(details[key]))
+    .filter((group) => Object.keys(group).length > 0);
+  const detailFeatures: PropertyFeature[] = [];
+
+  for (const group of detailGroups) {
+    const entries = [
+      ["Bedrooms", group.bedrooms],
+      ["Bathrooms", group.bathrooms],
+      ["Living Rooms", group.livingRooms],
+      ["Dining Rooms", group.diningRooms],
+      ["Kitchens", group.kitchens],
+      ["Floors", group.floors],
+      ["Car Parking", group.carParkingSpots],
+      ["Bike Parking", group.bikeParkingSpots],
+      ["Built Year", group.builtYear],
+      ["Furnished", group.furnished],
+      ["Area", group.area],
+    ] as const;
+
+    for (const [name, value] of entries) {
+      const text = asString(value);
+      if (text && text !== "0") detailFeatures.push({ name, value: text });
+    }
+  }
+
+  if (detailFeatures.length) return detailFeatures;
+
+  const featureEntries: PropertyFeature[] = [
+    { name: "Bedrooms", value: asString(record.bedrooms) },
+    { name: "Bathrooms", value: asString(record.bathrooms) },
+    { name: "Facing", value: asString(record.facing) },
+    { name: "Floors", value: asString(record.floors) },
+  ];
+
+  return featureEntries.filter((feature) => feature.value);
+}
+
+function mapFacilities(record: BridgeRecord): PropertyFeature[] {
+  return asStringArray(record.amenities).map((amenity) => ({
+    name: titleCase(amenity),
+    value: "Yes",
+  }));
+}
+
+function getCreatedHuman(record: BridgeRecord) {
+  const createdAt = asString(record.createdAt);
+  if (!createdAt) return "";
+
+  const createdDate = new Date(createdAt);
+  if (Number.isNaN(createdDate.getTime())) return "";
+
+  return createdDate.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function getTeam(record: BridgeRecord): PropertyItem["team"] {
+  const listedBy = asRecord(record.listedBy);
+  const displayName = asString(listedBy.displayName);
+  if (displayName) {
+    return {
+      id: asString(listedBy.id) || undefined,
+      name: displayName,
+      position: titleCase(asString(listedBy.type) || "Agent"),
+    };
+  }
+
+  const listingAgent = asString(record.listingAgent);
+  if (!listingAgent) return null;
+
+  return {
+    id: asString(record.listingAgentId) || undefined,
+    name: listingAgent,
+    position: "Agent",
+  };
+}
+
+function getTeamImage(record: BridgeRecord) {
+  const listedBy = asRecord(record.listedBy);
+  return asOptionalString(listedBy.displayImage);
+}
+
+function mapProperty(record: unknown): PropertyItem {
+  const property = asRecord(record);
+  const source = getSource(property);
+  const location = getLocation(property);
+  const purpose = firstText(property.purpose || property.purposes);
+  const propertyType = firstText(property.category) || firstText(property.type) || "Property";
+  const onCalling = asString(source.onCalling) === "1" ? "1" : "0";
+
+  return {
+    id: asString(property.id) || asString(source.id) || asString(property.slug),
+    slug: asString(property.slug) || asString(property.id),
+    code: asString(property.customId) || asString(source.code) || asString(property.id),
+    type: titleCase(propertyType),
+    for: purpose.toLowerCase(),
+    name: asString(property.title) || "Untitled property",
+    area: getAreaText(property),
+    location: location.location || "Nepal",
+    city: location.city || "Nepal",
+    price: getPricingText(property),
+    views: asString(source.views) || "0",
+    description: asString(property.description),
+    youtube_link: asOptionalString(source.youtubeLink),
+    tiktok_link: asOptionalString(source.tiktokLink),
+    is_featured: property.isFeatured === true ? "1" : "0",
+    is_premium: property.isFeatured === true ? "1" : "0",
+    features: mapFeatures(property),
+    facilities: mapFacilities(property),
+    created_at: asString(property.createdAt),
+    created_at_human: getCreatedHuman(property),
+    images: asStringArray(property.images),
+    on_calling: onCalling,
+    team: getTeam(property),
+    team_image: getTeamImage(property),
+  };
+}
+
+function getCategoryFilter(categorySlug: FilterPropertyListingsArgs["categorySlug"]) {
+  if (!categorySlug) return undefined;
+
+  const categoryBySlug = {
+    apartment: "Apartment",
+    commercial: "Commercial",
+    "colony-house": "Colony House",
+    house: "House",
+    land: "Land",
+    "semi-commercial": "Semi Commercial",
+  } satisfies Record<NonNullable<FilterPropertyListingsArgs["categorySlug"]>, string>;
+
+  return categoryBySlug[categorySlug];
+}
+
+function extractCodeFromSlug(slug: string) {
+  return slug.match(/-(\d+)$/)?.[1] ?? null;
+}
+
+async function searchProperties({
+  categorySlug,
+  page,
+  purpose,
+}: FilterPropertyListingsArgs) {
+  const { getPurposeApiValue } = await import("@/lib/property-taxonomy");
+  const currentPage = Math.max(1, page);
+
+  return logica.estate.property.search({
+    category: getCategoryFilter(categorySlug),
+    limit: SEARCH_PAGE_SIZE,
+    page: currentPage,
+    purpose: purpose ? getPurposeApiValue(purpose) : undefined,
+  });
+}
+
+export async function fetchProperties(page: number) {
+  const listings = await fetchPropertyListings({ page });
+
+  return {
+    data: listings.items,
     meta: {
-      current_page: currentPage,
-      last_page: Math.max(1, Math.ceil(sampleProperties.length / SEARCH_PAGE_SIZE)),
+      current_page: listings.currentPage,
+      last_page: listings.totalPages,
       per_page: SEARCH_PAGE_SIZE,
-      total: sampleProperties.length,
+      total: listings.totalItems,
     },
   } satisfies SearchResponse;
 }
@@ -443,24 +416,19 @@ export async function fetchPropertyListings({
   page,
   purpose,
 }: FilterPropertyListingsArgs): Promise<ListingPagePayload> {
-  const { getPurposeApiValue, matchesPropertyCategory } = await import("@/lib/property-taxonomy");
+  const response = await searchProperties({ categorySlug, page, purpose });
+  const body = asRecord(response.body);
+  const properties = Array.isArray(body.properties) ? body.properties : [];
+  const totalItems = asNumber(body.totalCount) ?? properties.length;
+  const totalPages = Math.max(1, asNumber(body.totalPages) ?? Math.ceil(totalItems / SEARCH_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, asNumber(body.page) ?? page), totalPages);
 
-  const filteredItems = sampleProperties.filter((property) => {
-    const matchesPurpose = purpose ? property.for === getPurposeApiValue(purpose) : true;
-    const matchesCategory = categorySlug
-      ? matchesPropertyCategory(property.type, categorySlug)
-      : true;
-
-    return matchesPurpose && matchesCategory;
-  });
-
-  const totalItems = filteredItems.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / SEARCH_PAGE_SIZE));
-  const currentPage = Math.min(Math.max(1, page), totalPages);
-  const start = (currentPage - 1) * SEARCH_PAGE_SIZE;
+  if (!response.ok) {
+    throw new Error(`Failed to fetch properties: ${response.status}`);
+  }
 
   return {
-    items: filteredItems.slice(start, start + SEARCH_PAGE_SIZE),
+    items: properties.map(mapProperty),
     currentPage,
     totalItems,
     totalPages,
@@ -468,16 +436,36 @@ export async function fetchPropertyListings({
 }
 
 export async function fetchPropertyBySlug(slug: string) {
-  return sampleProperties.find((property) => property.slug === slug) ?? null;
+  const code = extractCodeFromSlug(slug);
+
+  if (code) {
+    const response = await logica.estate.property.getByCode(code);
+    const body = asRecord(response.body);
+    if (response.ok && body.property) return mapProperty(body.property);
+  }
+
+  const response = await logica.estate.property.search({
+    limit: 1,
+    q: slug,
+  });
+  const body = asRecord(response.body);
+  const properties = Array.isArray(body.properties) ? body.properties : [];
+  const exactMatch = properties.find((property) => asRecord(property).slug === slug);
+
+  return exactMatch ? mapProperty(exactMatch) : null;
 }
 
 export async function fetchPremiumProperties(page = 1) {
-  const premiumProperties = sampleProperties.filter((property) => property.is_premium === "1");
-  const currentPage = Math.max(1, page);
-  const start = (currentPage - 1) * SEARCH_PAGE_SIZE;
+  const response = await logica.estate.property.search({
+    limit: 15,
+    page: Math.max(1, page),
+  });
+  const body = asRecord(response.body);
+  const properties = Array.isArray(body.properties) ? body.properties.map(mapProperty) : [];
+  const premiumProperties = properties.filter((property) => property.is_premium === "1");
 
   return {
-    data: premiumProperties.slice(start, start + SEARCH_PAGE_SIZE),
+    data: (premiumProperties.length ? premiumProperties : properties).slice(0, PREMIUM_PAGE_SIZE),
   } satisfies PremiumResponse;
 }
 
