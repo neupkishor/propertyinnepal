@@ -52,11 +52,11 @@ export default function RootLayout({
                   decoding="async"
                   className="h-auto max-h-11 w-auto rounded-md object-contain"
                 />
-                <span className="min-w-0">
-                  <span className="block text-base font-bold text-brand-deep">
+                <span className="min-w-0 leading-tight">
+                  <span className="block text-sm font-bold text-brand-deep sm:text-base">
                     Property in Nepal
                   </span>
-                  <span className="hidden text-xs font-medium text-brand sm:block">
+                  <span className="block text-[0.68rem] font-medium leading-tight text-brand sm:text-xs">
                     घर किन्दा सम्झिनु ल !
                   </span>
                 </span>

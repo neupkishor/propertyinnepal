@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PropertyPhotoGallery } from "@/components/property-photo-gallery";
 import { fetchPropertyBySlug } from "@/lib/property-api";
 
 type PropertyDetailsPageProps = {
@@ -50,7 +51,13 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
   return (
     <>
-      <section className="mx-auto max-w-[1440px] px-6 pb-10 pt-12 lg:px-8 lg:pt-16">
+      {property.images?.length > 0 ? (
+        <section className="mx-auto max-w-[1440px] px-6 pb-10 pt-3 lg:px-8 lg:pt-4">
+          <PropertyPhotoGallery images={property.images} title={property.name} />
+        </section>
+      ) : null}
+
+      <section className="mx-auto max-w-[1440px] px-6 pb-10 lg:px-8">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-deep/70">
             Property Details
@@ -73,27 +80,6 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
             {renderPrice(property.price, property.on_calling)}
           </p>
           <p className="mt-1 text-sm text-slate-600">Area: {property.area}</p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1440px] px-6 pb-12 lg:px-8">
-        <div className="grid gap-3 md:grid-cols-2">
-          {property.images?.map((image, index) => (
-            <div
-              key={`${property.id}-image-${index}`}
-              className="overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
-            >
-              <img
-                src={image}
-                alt={`${property.name} image ${index + 1}`}
-                width={1200}
-                height={800}
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className="h-64 w-full object-cover object-center"
-              />
-            </div>
-          ))}
         </div>
       </section>
 
