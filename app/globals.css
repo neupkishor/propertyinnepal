@@ -163,16 +163,3 @@ body {
 .section-title-link-group:has(.section-title-icon-link:focus-visible) .section-title-underline {
   background-size: 100% 2px;
 }
-
-@media (min-width: 1024px) and (max-width: 1439px) {
-  [data-social-rail-section] .social-rail-shift-target {
-    transition:
-      transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-  }
-
-  [data-social-rail-section].social-rail-section-active .social-rail-shift-target {
-    transform: translateX(clamp(3.5rem, 4vw, 4.75rem));
-  }
-}
