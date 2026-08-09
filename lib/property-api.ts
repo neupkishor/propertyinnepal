@@ -153,6 +153,10 @@ function asStringArray(value: unknown): string[] {
     .filter(Boolean);
 }
 
+function uniqueStrings(values: string[]) {
+  return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
+}
+
 function titleCase(value: string) {
   return value
     .trim()
@@ -280,7 +284,29 @@ function mapFeatures(record: BridgeRecord): PropertyFeature[] {
 }
 
 function mapFacilities(record: BridgeRecord): PropertyFeature[] {
-  return asStringArray(record.amenities).map((amenity) => ({
+  const source = getSource(record);
+  const rawAmenities = [record.amenities, source.amenities];
+  const amenities = uniqueStrings(
+    rawAmenities.flatMap((value) => {
+      if (!Array.isArray(value)) return [];
+
+      return value
+        .map((entry) => {
+          if (typeof entry === "string") return entry;
+
+          const amenityRecord = asRecord(entry);
+          return (
+            asString(amenityRecord.name) ||
+            asString(amenityRecord.label) ||
+            asString(amenityRecord.title) ||
+            asString(amenityRecord.value)
+          );
+        })
+        .filter(Boolean);
+    }),
+  );
+
+  return amenities.map((amenity) => ({
     name: titleCase(amenity),
     value: "Yes",
   }));
