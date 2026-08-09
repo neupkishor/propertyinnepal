@@ -28,7 +28,13 @@ export const socialLinks = [
 
 type SocialIconName = (typeof socialLinks)[number]["icon"];
 
-function SocialIcon({ icon, className = "size-4" }: { icon: SocialIconName; className?: string }) {
+export function SocialIcon({
+  icon,
+  className = "size-4",
+}: {
+  icon: SocialIconName;
+  className?: string;
+}) {
   if (icon === "facebook") {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true" className={`${className} fill-current`}>
@@ -97,9 +103,10 @@ export function FloatingSocialRail() {
   return (
     <aside
       aria-label="Social media links"
-      className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 overflow-hidden rounded-r-2xl border border-l-0 border-white/45 bg-brand-deep/95 shadow-[0_18px_50px_rgba(15,23,42,0.26)] backdrop-blur md:block"
+      className="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 rounded-[1.75rem] border border-white/55 bg-white/16 p-1.5 shadow-[0_20px_48px_rgba(15,23,42,0.16)] ring-1 ring-white/30 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/14 lg:block"
     >
-      <div className="flex flex-col gap-1 p-1.5">
+      <div className="pointer-events-none absolute inset-x-2 top-1 h-8 rounded-full bg-linear-to-b from-white/55 to-transparent blur-md" />
+      <div className="relative flex flex-col gap-2">
         {socialLinks.map((item) => (
           <a
             key={item.label}
@@ -107,7 +114,7 @@ export function FloatingSocialRail() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={item.label}
-            className="inline-flex size-11 items-center justify-center rounded-xl text-white/80 transition duration-200 hover:bg-white hover:text-brand-deep focus-visible:bg-white focus-visible:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/35"
+            className="inline-flex size-11 items-center justify-center rounded-2xl border border-white/25 bg-white/14 text-slate-700/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] transition duration-200 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/28 hover:text-brand-deep hover:shadow-[0_12px_24px_rgba(15,23,42,0.14),inset_0_1px_0_rgba(255,255,255,0.56)] focus-visible:-translate-y-0.5 focus-visible:border-white/55 focus-visible:bg-white/30 focus-visible:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/30"
           >
             <SocialIcon icon={item.icon} className="size-5" />
           </a>

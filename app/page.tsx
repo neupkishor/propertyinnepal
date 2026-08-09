@@ -419,7 +419,10 @@ export default async function Home() {
 
   return (
     <>
-      <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white">
+      <section
+        data-social-rail-section
+        className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white"
+      >
         <HeroBackgroundVideo
           src="/hero-video.mp4"
           className="absolute inset-0 h-full w-full object-cover object-center"
@@ -427,7 +430,7 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.78)_0%,rgba(2,6,23,0.5)_42%,rgba(2,6,23,0.08)_75%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.68)_0%,transparent_55%)]" />
 
-        <div className="relative mx-auto flex w-full max-w-[1440px] items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
+        <div className="social-rail-shift-target relative mx-auto flex w-full max-w-[1440px] items-end px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
           <div className="max-w-3xl">
             <p className="inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.08em] text-white backdrop-blur-md">
               Find your next home in Nepal
@@ -484,8 +487,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-9 lg:py-11">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
+      <section data-social-rail-section className="bg-[#eef4fa] py-9 lg:py-11">
+        <div className="social-rail-shift-target mx-auto max-w-[1440px] px-6 lg:px-8">
           <h2 className="font-display text-[1.35rem] font-bold leading-tight text-slate-950 sm:text-[1.75rem] lg:text-[1.95rem]">
             Property Categories
           </h2>
@@ -493,7 +496,7 @@ export default async function Home() {
             Browse homes, land, rentals, and commercial spaces by property type.
           </p>
         </div>
-        <div className="mx-auto max-w-[1440px]">
+        <div className="social-rail-shift-target mx-auto max-w-[1440px]">
           <DragScrollCarousel
             autoScrollIntervalMs={6000}
             className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:gap-5 lg:scroll-pl-8 lg:px-8"
@@ -520,8 +523,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
-        <div className="max-w-3xl">
+      <section data-social-rail-section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
+        <div className="social-rail-shift-target max-w-3xl">
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
             <LinkedSectionTitle
               href="/properties?listing=premium"
@@ -534,7 +537,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
+        <DragScrollCarousel className="social-rail-shift-target no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
           {premiumPreviewListings.map((property) => (
             <PremiumPropertyCard
               key={property.id}
@@ -563,7 +566,7 @@ export default async function Home() {
           </Link>
         </DragScrollCarousel>
 
-        <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
+        <div className="social-rail-shift-target mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
           {premiumPreviewListings.map((property) => (
             <PremiumPropertyCard
               key={property.id}
@@ -574,9 +577,9 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-14">
+      <section data-social-rail-section className="bg-[#eef4fa] py-14">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <div className="social-rail-shift-target max-w-3xl">
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
               <LinkedSectionTitle
                 href="/properties"
@@ -589,7 +592,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
+          <DragScrollCarousel className="social-rail-shift-target no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
             {recentPreviewListings.map((property) => (
               <PremiumPropertyCard
                 key={property.id}
@@ -618,7 +621,7 @@ export default async function Home() {
             </Link>
           </DragScrollCarousel>
 
-          <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
+          <div className="social-rail-shift-target mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
             {recentPreviewListings.map((property) => (
               <PremiumPropertyCard
                 key={property.id}
@@ -630,8 +633,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
+      <section data-social-rail-section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
+        <div className="social-rail-shift-target grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
           <div className="relative mx-auto w-full max-w-2xl">
             <div className="overflow-hidden rounded-xl border-[18px] border-slate-200 bg-white">
               <img
@@ -689,8 +692,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-14 text-slate-950">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
+      <section data-social-rail-section className="bg-[#eef4fa] py-14 text-slate-950">
+        <div className="social-rail-shift-target mx-auto max-w-[1440px] px-6 lg:px-8">
           <div className="max-w-3xl">
             <h2 className="font-display text-[1.4rem] font-bold leading-tight sm:text-[1.85rem] lg:text-[2.05rem]">
               Reviews From Our Clients
@@ -701,7 +704,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px]">
+        <div className="social-rail-shift-target mx-auto max-w-[1440px]">
           <DragScrollCarousel
             autoScrollIntervalMs={6500}
             className="no-scrollbar mt-6 flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:scroll-pl-8 lg:px-8"
@@ -748,8 +751,8 @@ export default async function Home() {
       </section>
 
       {latestBlogs.length > 0 ? (
-        <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
-          <div className="max-w-3xl">
+        <section data-social-rail-section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8">
+          <div className="social-rail-shift-target max-w-3xl">
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
               <LinkedSectionTitle
                 href="/blogs"
@@ -762,7 +765,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="social-rail-shift-target mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {latestBlogs.map((blog) => (
               <BlogPreviewCard key={blog.id} blog={blog} />
             ))}

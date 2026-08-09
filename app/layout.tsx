@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Outfit } from "next/font/google";
+import { FloatingSocialRail } from "@/components/floating-social-rail";
 import { HeaderNav } from "@/components/header-nav";
-import { FloatingSocialRail, FooterSocialLinks } from "@/components/social-links";
+import { FooterSocialLinks } from "@/components/social-links";
 import { navigation } from "@/lib/site";
 import "./globals.css";
 
