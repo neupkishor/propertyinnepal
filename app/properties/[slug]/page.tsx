@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropertyPhotoGallery } from "@/components/property-photo-gallery";
+import { PropertyShareButton } from "@/components/property-share-button";
 import { fetchPropertyBySlug } from "@/lib/property-api";
 
 type PropertyDetailsPageProps = {
@@ -29,8 +30,17 @@ export async function generateMetadata({
 }
 
 function renderPrice(price: string, onCalling: string) {
-  if (onCalling === "1") return "On Call";
-  return `NRS ${price}`;
+  if (onCalling === "1") return "मूल्य सम्पर्कमा";
+
+  const formattedPrice = price
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+
+  return `NRs. ${formattedPrice}`;
+}
+
+function toTitleCase(value: string) {
+  return value.toLowerCase().replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
 function renderTeam(team: { id?: string; name?: string; position?: string } | string | null) {
@@ -58,28 +68,34 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       ) : null}
 
       <section className="mx-auto max-w-[1440px] px-6 pb-10 lg:px-8">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-deep/70">
-            Property Details
+        <div className="max-w-5xl">
+          <p className="text-xs font-medium text-slate-500 sm:text-sm">
+            Property ID: {property.code}
+            <span className="mx-2 inline-block h-1 w-1 rounded-full bg-slate-300 align-middle" />
+            {property.type}
+            <span className="mx-2 inline-block h-1 w-1 rounded-full bg-slate-300 align-middle" />
+            {toTitleCase(property.for)}
           </p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
-            {property.name}
-          </h1>
-          <p className="mt-4 text-base text-slate-600">
-            {property.location}, {property.city}
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-              ID: {property.code}
-            </span>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-              {property.for} • {property.type}
-            </span>
+
+          <div className="mt-1">
+            <h1 className="max-w-4xl text-2xl font-semibold leading-tight text-slate-950 sm:text-3xl">
+              <span>{property.name}</span>
+              <span className="inline-block w-4" aria-hidden="true" />
+              <PropertyShareButton title={property.name} />
+            </h1>
           </div>
-          <p className="mt-5 text-3xl font-semibold text-slate-950">
+
+          <p className="mt-0.5 text-xl font-semibold text-brand-deep sm:text-2xl">
             {renderPrice(property.price, property.on_calling)}
           </p>
-          <p className="mt-1 text-sm text-slate-600">Area: {property.area}</p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-slate-600">
+            <p>
+              {property.location}, {property.city}
+            </p>
+            <span className="hidden h-1 w-1 rounded-full bg-slate-300 sm:block" />
+            <p>Area: {property.area}</p>
+          </div>
         </div>
       </section>
 
