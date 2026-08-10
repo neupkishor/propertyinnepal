@@ -7,7 +7,7 @@ import { PropertyAmenitiesGrid } from "@/components/property-amenities-grid";
 import { PropertyFloatingAgentSidebar } from "@/components/property-floating-agent-sidebar";
 import { PropertyPhotoGallery } from "@/components/property-photo-gallery";
 import { PropertyShareButton } from "@/components/property-share-button";
-import { fetchPropertyBySlug } from "@/lib/property-api";
+import { fetchPropertyBySlug, formatPropertyPrice } from "@/lib/property-api";
 import { PROPERTY_AGENT_FALLBACK } from "./property-agent";
 
 type PropertyDetailsPageProps = {
@@ -35,13 +35,7 @@ export async function generateMetadata({
 }
 
 function renderPrice(price: string, onCalling: string) {
-  if (onCalling === "1") return "मूल्य सम्पर्कमा";
-
-  const formattedPrice = price
-    .toLowerCase()
-    .replace(/\b\w/g, (character) => character.toUpperCase());
-
-  return `NRs. ${formattedPrice}`;
+  return formatPropertyPrice(price, onCalling, "मूल्य सम्पर्कमा");
 }
 
 function toTitleCase(value: string) {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { PropertyItem } from "@/lib/property-api";
+import { formatPropertyPrice, type PropertyItem } from "@/lib/property-api";
 
 type PropertyListingsPageProps = {
   emptyMessage: string;
@@ -14,11 +14,6 @@ type PropertyListingsPageProps = {
   total: number;
   buildPageHref: (page: number) => string;
 };
-
-function formatListingPrice(propertyPrice: string, onCalling: string) {
-  if (onCalling === "1") return "On Call";
-  return `NRS ${propertyPrice}`;
-}
 
 export function PropertyListingsPage({
   buildPageHref,
@@ -99,7 +94,7 @@ export function PropertyListingsPage({
                   {property.location}, {property.city}
                 </p>
                 <p className="mt-3 text-2xl font-semibold text-slate-950">
-                  {formatListingPrice(property.price, property.on_calling)}
+                  {formatPropertyPrice(property.price, property.on_calling)}
                 </p>
                 <p className="mt-2 text-sm text-slate-600">Area: {property.area}</p>
 

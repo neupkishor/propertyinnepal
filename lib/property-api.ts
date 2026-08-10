@@ -93,6 +93,24 @@ export type BlogDetail = {
   created_at_human: string;
 };
 
+export function formatPropertyPrice(
+  price: string | null | undefined,
+  onCalling: string | null | undefined,
+  onCallLabel = "On Call",
+) {
+  if (onCalling === "1") return onCallLabel;
+
+  const normalizedPrice = price?.trim();
+  if (!normalizedPrice) return "N/A";
+  if (/^on call$/i.test(normalizedPrice)) return onCallLabel;
+
+  const formattedPrice = normalizedPrice
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+
+  return `NRs. ${formattedPrice}`;
+}
+
 type BlogsResponse = {
   data: BlogItem[];
   meta?: {

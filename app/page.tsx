@@ -6,6 +6,7 @@ import {
   fetchBlogs,
   fetchPremiumProperties,
   fetchPropertyListings,
+  formatPropertyPrice,
   type BlogItem,
   type PropertyFeature,
   type PropertyItem,
@@ -139,13 +140,6 @@ const clientReviews = [
 function getDisplayValue(value: string | null | undefined) {
   const normalized = value?.trim();
   return normalized && normalized.length > 0 ? normalized : "N/A";
-}
-
-function formatListingPrice(price: string | undefined, onCalling: string | undefined) {
-  if (onCalling === "1") return "On Call";
-  const normalizedPrice = getDisplayValue(price);
-  if (normalizedPrice === "N/A") return normalizedPrice;
-  return `NRS ${normalizedPrice}`;
 }
 
 function getFeatureValue(
@@ -284,7 +278,7 @@ function PremiumPropertyCard({
     .map((value) => value?.trim())
     .filter(Boolean)
     .join(", ");
-  const price = formatListingPrice(property.price, property.on_calling);
+  const price = formatPropertyPrice(property.price, property.on_calling);
   const propertyHref = property.slug?.trim()
     ? `/properties/${property.slug}`
     : undefined;
