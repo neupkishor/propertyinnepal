@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
+import PropertyCardS1 from "@/components/estate/propertyCard.s1";
 import { PropertyAgentContactCard } from "@/components/property-agent-contact-card";
 import { PropertyAmenitiesGrid } from "@/components/property-amenities-grid";
 import { PropertyFloatingAgentSidebar } from "@/components/property-floating-agent-sidebar";
+import { PropertyLifeAroundArea } from "@/components/property-life-around-area";
 import { PropertyPhotoGallery } from "@/components/property-photo-gallery";
 import { PropertyShareButton } from "@/components/property-share-button";
-import { fetchPropertyBySlug, formatPropertyPrice } from "@/lib/property-api";
+import {
+  fetchPremiumProperties,
+  fetchPropertyBySlug,
+  formatPropertyPrice,
+  type PropertyFeature,
+  type PropertyItem,
+} from "@/lib/property-api";
 import { PROPERTY_AGENT_FALLBACK } from "./property-agent";
 
 type PropertyDetailsPageProps = {
@@ -92,6 +100,66 @@ function getRoomsAndSpacingFeatures(
   return orderedFeatures;
 }
 
+function getFeatureValue(
+  features: PropertyFeature[] | undefined,
+  matchers: RegExp[],
+) {
+  if (!features?.length) return null;
+
+  const feature = features.find((item) =>
+    matchers.some((matcher) => matcher.test(`${item.name} ${item.value}`)),
+  );
+
+  return feature?.value || null;
+}
+
+function formatCountLabel(value: string | null, label: string) {
+  return value ? `${value} ${label}` : `N/A ${label}`;
+}
+
+function formatPropertyKind(type: string) {
+  const normalizedType = type.trim();
+  return normalizedType ? normalizedType.toLowerCase() : "property";
+}
+
+function formatPurpose(value: string) {
+  const normalizedValue = value.trim();
+  return normalizedValue ? normalizedValue.toLowerCase() : "listing";
+}
+
+function formatAboutFeatureList(features: { name: string; value: string }[]) {
+  const details = features
+    .filter((feature) => feature.name !== "Area")
+    .map((feature) => `${feature.value} ${feature.name}`);
+
+  if (details.length === 0) return null;
+  if (details.length === 1) return details[0];
+  if (details.length === 2) return `${details[0]} and ${details[1]}`;
+
+  return `${details.slice(0, -1).join(", ")}, and ${details[details.length - 1]}`;
+}
+
+function formatSentenceList(values: string[]) {
+  const normalizedValues = values.map((value) => value.trim()).filter(Boolean);
+
+  if (normalizedValues.length === 0) return null;
+  if (normalizedValues.length === 1) return normalizedValues[0];
+  if (normalizedValues.length === 2) return `${normalizedValues[0]} and ${normalizedValues[1]}`;
+
+  return `${normalizedValues.slice(0, -1).join(", ")}, and ${
+    normalizedValues[normalizedValues.length - 1]
+  }`;
+}
+
+function getAmenityList(facilities: PropertyFeature[]) {
+  return formatSentenceList(
+    facilities
+      .map((facility) => facility.name || facility.value)
+      .filter(Boolean)
+      .slice(0, 12),
+  );
+}
+
 function RoomsAndSpacingCard({ feature }: { feature: { name: string; value: string } }) {
   return (
     <div className="cursor-pointer rounded-2xl border border-slate-200/80 bg-white p-3.5 text-center transition-colors duration-200 hover:border-brand-deep/35 hover:bg-sky-50/75 sm:p-4">
@@ -114,15 +182,57 @@ function RoomsAndSpacingCard({ feature }: { feature: { name: string; value: stri
   );
 }
 
+function RecommendedPropertyCard({ property }: { property: PropertyItem }) {
+  const bedroomValue = getFeatureValue(property.features, [/bed/i, /bedroom/i]);
+  const bathroomValue = getFeatureValue(property.features, [/bath/i, /bathroom/i]);
+  const location = [property.location, property.city]
+    .map((value) => value?.trim())
+    .filter(Boolean)
+    .join(", ");
+
+  return (
+    <PropertyCardS1
+      className="h-full"
+      href={`/properties/${property.slug}`}
+      imageAlt={property.name}
+      imageSrc={property.images?.[0] ?? "/logo.png"}
+      agentImageSrc={property.team_image}
+      title={property.name}
+      status={property.for}
+      price={formatPropertyPrice(property.price, property.on_calling)}
+      priceTag={formatPropertyPrice(property.price, property.on_calling)}
+      propertyType={property.type}
+      location={location || "N/A"}
+      bedroomLabel={formatCountLabel(bedroomValue, "Beds")}
+      bathroomLabel={formatCountLabel(bathroomValue, "Baths")}
+      areaLabel={property.area || "N/A"}
+    />
+  );
+}
+
 export default async function PropertyDetailsPage({ params }: PropertyDetailsPageProps) {
   const { slug } = await params;
-  const property = await fetchPropertyBySlug(slug);
+  const [property, recommendedPayload] = await Promise.all([
+    fetchPropertyBySlug(slug),
+    fetchPremiumProperties(),
+  ]);
 
   if (!property) {
     notFound();
   }
 
+  const recommendedProperties = recommendedPayload.data
+    .filter((item) => item.id !== property.id && item.slug !== property.slug)
+    .slice(0, 3);
   const roomsAndSpacingFeatures = getRoomsAndSpacingFeatures(property.features, property.area);
+  const aboutFeatureList = formatAboutFeatureList(roomsAndSpacingFeatures);
+  const amenityList = getAmenityList(property.facilities);
+  const propertyKind = formatPropertyKind(property.type);
+  const propertyPurpose = formatPurpose(property.for);
+  const propertyLocation = [property.location, property.city]
+    .map((value) => value?.trim())
+    .filter(Boolean)
+    .join(", ");
   const agentName = getTeamName(property.team);
   const agentRole = getTeamRole(property.team);
 
@@ -274,37 +384,79 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
+        <PropertyLifeAroundArea areaName={propertyLocation || property.location || property.city} />
+
         <section className="w-full bg-[#eef4fa]">
           <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12 lg:pr-[calc(360px+40px+2rem)]">
-            <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-              <article className="rounded-2xl border border-slate-200/80 bg-white p-6 transition-colors duration-200 hover:border-brand-deep/18 hover:bg-sky-50/45">
-                <h2 className="text-2xl font-semibold text-slate-950">Description</h2>
-                <div
-                  className="mt-4 text-sm leading-7 text-slate-700"
-                  dangerouslySetInnerHTML={{
-                    __html: property.description || "No description provided.",
-                  }}
-                />
-              </article>
-
-              <article className="rounded-2xl border border-slate-200/80 bg-white p-6 transition-colors duration-200 hover:border-brand-deep/18 hover:bg-sky-50/45">
-                <h2 className="text-2xl font-semibold text-slate-950">Quick Facts</h2>
-                <div className="mt-4 grid gap-2 text-sm text-slate-700">
-                  <p>
-                    <span className="font-semibold">Views:</span> {property.views}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Listed:</span>{" "}
-                    {property.created_at_human || "N/A"}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Team:</span> {renderTeam(property.team)}
-                  </p>
-                </div>
-              </article>
-            </div>
+            <article className="max-w-5xl">
+              <h2 className="text-2xl font-semibold text-slate-950">About This Property</h2>
+              <p className="mt-4 text-sm leading-7 text-slate-700">
+                Property in Nepal proudly presents this {propertyKind} for {propertyPurpose}
+                {propertyLocation ? ` at ${propertyLocation}` : ""}. This listing offers a
+                practical blend of location, comfort, and accessibility for buyers and tenants
+                looking for a well-positioned property in Nepal.
+              </p>
+              {aboutFeatureList ? (
+                <p className="mt-4 text-sm leading-7 text-slate-700">
+                  This {propertyKind} has {aboutFeatureList}. The total area is{" "}
+                  {property.area || "N/A"}, giving the property a balanced layout for regular use,
+                  family living, or long-term investment.
+                </p>
+              ) : null}
+              {amenityList ? (
+                <p className="mt-4 text-sm leading-7 text-slate-700">
+                  Modern amenities and facilities include {amenityList}.
+                </p>
+              ) : null}
+              <p className="mt-4 text-sm leading-7 text-slate-700">
+                Asking budget:{" "}
+                <span className="font-semibold text-slate-950">
+                  {formatPropertyPrice(property.price, property.on_calling)}
+                </span>
+                . This property has {property.views} views, was listed on{" "}
+                {property.created_at_human || "N/A"}, and is managed by{" "}
+                {renderTeam(property.team)}.
+              </p>
+              <p className="mt-4 text-sm leading-7 text-slate-700">
+                For more information, updated availability, negotiation details, or to schedule a
+                property visit, contact {agentName} at {PROPERTY_AGENT_FALLBACK.phone} or{" "}
+                {PROPERTY_AGENT_FALLBACK.email}.
+              </p>
+            </article>
           </div>
         </section>
+
+        {recommendedProperties.length ? (
+          <section className="w-full bg-white">
+            <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12 lg:pr-[calc(360px+40px+2rem)]">
+              <div className="flex items-end justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-semibold text-slate-950">
+                    Recommended Properties
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Similar verified listings selected from current property inventory.
+                  </p>
+                </div>
+                <Link
+                  href="/properties"
+                  className="hidden text-sm font-semibold text-brand-deep transition hover:text-slate-950 sm:inline-flex"
+                >
+                  View all properties
+                </Link>
+              </div>
+
+              <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {recommendedProperties.map((recommendedProperty) => (
+                  <RecommendedPropertyCard
+                    key={recommendedProperty.id}
+                    property={recommendedProperty}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <section className="w-full bg-white">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:pr-[calc(360px+40px+2rem)]">
