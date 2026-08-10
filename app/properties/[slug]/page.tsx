@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import { PropertyAgentContactCard } from "@/components/property-agent-contact-card";
 import { PropertyAmenitiesGrid } from "@/components/property-amenities-grid";
+import { PropertyFloatingAgentSidebar } from "@/components/property-floating-agent-sidebar";
 import { PropertyPhotoGallery } from "@/components/property-photo-gallery";
 import { PropertyShareButton } from "@/components/property-share-button";
 import { fetchPropertyBySlug } from "@/lib/property-api";
@@ -140,6 +141,16 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       </section>
 
       <div className="relative pb-16 lg:pb-24">
+        <PropertyFloatingAgentSidebar>
+          <PropertyAgentContactCard
+            agentImageSrc={property.team_image}
+            agentName={agentName}
+            agentRole={agentRole}
+            phone={PROPERTY_AGENT_FALLBACK.phone}
+            email={PROPERTY_AGENT_FALLBACK.email}
+          />
+        </PropertyFloatingAgentSidebar>
+
         <section className="mx-auto max-w-[1440px] px-6 pb-8 lg:px-8 lg:pr-[calc(360px+40px+2rem)]">
           <div className="max-w-5xl">
             <p className="text-xs font-medium text-slate-500 sm:text-sm">
@@ -172,8 +183,8 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <aside className="mx-auto max-w-[1440px] px-6 pb-8 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:bottom-0 lg:top-0 lg:px-8 lg:pb-0">
-          <div className="lg:pointer-events-auto lg:sticky lg:top-[112px] lg:ml-auto lg:w-[360px]">
+        <aside className="mx-auto max-w-[1440px] px-6 pb-8 lg:hidden">
+          <div>
             <PropertyAgentContactCard
               agentImageSrc={property.team_image}
               agentName={agentName}
