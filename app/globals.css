@@ -53,6 +53,12 @@ main section:nth-of-type(even) {
   clip-path: inset(0 -100vmax);
 }
 
+main section.section-tone-white {
+  background: #ffffff !important;
+  box-shadow: 0 0 0 100vmax #ffffff;
+  clip-path: inset(0 -100vmax);
+}
+
 main section section {
   background: transparent !important;
   box-shadow: none;

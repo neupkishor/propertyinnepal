@@ -427,7 +427,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       </div>
 
       {recommendedProperties.length ? (
-        <section className="w-full">
+        <section className="section-tone-white w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12">
             <div>
               <div>
@@ -442,19 +442,19 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
             <DragScrollCarousel
               autoScrollIntervalMs={6500}
-              className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8 lg:-mx-8 lg:px-8"
+              className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden"
             >
               {recommendedProperties.map((recommendedProperty) => (
                 <div
                   key={recommendedProperty.id}
-                  className="w-full shrink-0 snap-start sm:w-[calc((100%_-_1.25rem)_/_2)] lg:w-[calc((100%_-_2.5rem)_/_3)] xl:w-[calc((100%_-_3.75rem)_/_4)]"
+                  className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
                 >
                   <RecommendedPropertyCard property={recommendedProperty} />
                 </div>
               ))}
               <Link
                 href="/properties"
-                className="inline-flex w-full shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[calc((100%_-_1.25rem)_/_2)] lg:w-[calc((100%_-_2.5rem)_/_3)] xl:w-[calc((100%_-_3.75rem)_/_4)]"
+                className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
               >
                 <span className="text-xl font-bold leading-tight">
                   View more properties
@@ -472,6 +472,15 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
                 </span>
               </Link>
             </DragScrollCarousel>
+
+            <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
+              {recommendedProperties.map((recommendedProperty) => (
+                <RecommendedPropertyCard
+                  key={recommendedProperty.id}
+                  property={recommendedProperty}
+                />
+              ))}
+            </div>
           </div>
         </section>
       ) : null}
