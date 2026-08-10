@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 
 type PropertyPhotoGalleryProps = {
@@ -169,91 +170,98 @@ export function PropertyPhotoGallery({ images, title }: PropertyPhotoGalleryProp
         ) : null}
       </div>
 
-      {activePhoto ? (
-        <div
-          className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 text-white"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${title} photos`}
-        >
-          <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <p className="text-sm font-semibold">
-              {activePhoto.index + 1} / {galleryImages.length}
-            </p>
-            <button
-              type="button"
-              onClick={() => setActiveIndex(null)}
-              className="inline-flex h-10 min-w-20 items-center justify-center rounded-full bg-white/10 px-4 text-sm font-semibold transition hover:bg-white/20"
+      {activePhoto
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[100] flex flex-col bg-slate-950/95 text-white"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${title} photos`}
             >
-              Close
-            </button>
-          </div>
-
-          <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4 sm:px-16 sm:pb-8">
-            {galleryImages.length > 1 ? (
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveIndex(
-                    activePhoto.index === 0 ? galleryImages.length - 1 : activePhoto.index - 1,
-                  )
-                }
-                className="absolute left-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl font-semibold transition hover:bg-white/20 sm:left-6"
-                aria-label="View previous photo"
-              >
-                &lt;
-              </button>
-            ) : null}
-
-            <img
-              src={activePhoto.image}
-              alt={`${title} selected photo ${activePhoto.index + 1}`}
-              className="max-h-full max-w-full object-contain"
-            />
-
-            {galleryImages.length > 1 ? (
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveIndex(
-                    activePhoto.index === galleryImages.length - 1 ? 0 : activePhoto.index + 1,
-                  )
-                }
-                className="absolute right-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl font-semibold transition hover:bg-white/20 sm:right-6"
-                aria-label="View next photo"
-              >
-                &gt;
-              </button>
-            ) : null}
-          </div>
-
-          {galleryImages.length > 1 ? (
-            <div className="flex gap-2 overflow-x-auto border-t border-white/10 px-4 py-3 sm:px-6">
-              {galleryImages.map((image, index) => (
+              <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                <p className="text-sm font-semibold">
+                  {activePhoto.index + 1} / {galleryImages.length}
+                </p>
                 <button
-                  key={`${image}-thumbnail-${index}`}
                   type="button"
-                  onClick={() => setActiveIndex(index)}
-                  className={`h-16 w-24 shrink-0 cursor-pointer overflow-hidden rounded-md border transition ${
-                    activeIndex === index ? "border-white" : "border-white/20 opacity-70"
-                  }`}
-                  aria-label={`View ${title} photo ${index + 1}`}
+                  onClick={() => setActiveIndex(null)}
+                  className="inline-flex h-10 min-w-20 items-center justify-center rounded-full bg-white/10 px-4 text-sm font-semibold transition hover:bg-white/20"
                 >
-                  <img
-                    src={image}
-                    alt=""
-                    width={160}
-                    height={110}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover object-center"
-                  />
+                  Close
                 </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+              </div>
+
+              <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4 sm:px-16 sm:pb-8">
+                {galleryImages.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveIndex(
+                        activePhoto.index === 0
+                          ? galleryImages.length - 1
+                          : activePhoto.index - 1,
+                      )
+                    }
+                    className="absolute left-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl font-semibold transition hover:bg-white/20 sm:left-6"
+                    aria-label="View previous photo"
+                  >
+                    &lt;
+                  </button>
+                ) : null}
+
+                <img
+                  src={activePhoto.image}
+                  alt={`${title} selected photo ${activePhoto.index + 1}`}
+                  className="max-h-full max-w-full object-contain"
+                />
+
+                {galleryImages.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveIndex(
+                        activePhoto.index === galleryImages.length - 1
+                          ? 0
+                          : activePhoto.index + 1,
+                      )
+                    }
+                    className="absolute right-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-2xl font-semibold transition hover:bg-white/20 sm:right-6"
+                    aria-label="View next photo"
+                  >
+                    &gt;
+                  </button>
+                ) : null}
+              </div>
+
+              {galleryImages.length > 1 ? (
+                <div className="flex gap-2 overflow-x-auto border-t border-white/10 px-4 py-3 sm:px-6">
+                  {galleryImages.map((image, index) => (
+                    <button
+                      key={`${image}-thumbnail-${index}`}
+                      type="button"
+                      onClick={() => setActiveIndex(index)}
+                      className={`h-16 w-24 shrink-0 cursor-pointer overflow-hidden rounded-md border transition ${
+                        activeIndex === index ? "border-white" : "border-white/20 opacity-70"
+                      }`}
+                      aria-label={`View ${title} photo ${index + 1}`}
+                    >
+                      <img
+                        src={image}
+                        alt=""
+                        width={160}
+                        height={110}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

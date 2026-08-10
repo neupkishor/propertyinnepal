@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { SocialIcon, socialLinks } from "@/components/social-links";
 
 type PropertyAgentContactCardProps = {
@@ -57,6 +58,125 @@ function getCalendarDates(monthDate: Date) {
   });
 }
 
+type VisitCalendarDialogProps = {
+  calendarDates: Date[];
+  calendarMonth: Date;
+  onChangeMonth: (offset: number) => void;
+  onClose: () => void;
+  onSelectDate: (date: Date) => void;
+  selectedVisitDate: string;
+};
+
+function VisitCalendarDialog({
+  calendarDates,
+  calendarMonth,
+  onChangeMonth,
+  onClose,
+  onSelectDate,
+  selectedVisitDate,
+}: VisitCalendarDialogProps) {
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex cursor-pointer items-center justify-center bg-slate-950/45 px-5 py-8 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Choose visit date"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md cursor-default rounded-[1.5rem] bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.28)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-semibold text-slate-950">Visit date</h2>
+            <p className="mt-1 text-sm text-slate-500">Choose when you want to visit.</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close calendar popup"
+            className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="size-5 fill-none stroke-current stroke-2"
+            >
+              <path d="M6 6 18 18" strokeLinecap="round" />
+              <path d="M18 6 6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="mt-5 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={() => onChangeMonth(-1)}
+            aria-label="Previous month"
+            className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="size-4 fill-none stroke-current stroke-2"
+            >
+              <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <p className="text-sm font-semibold text-slate-950">{formatMonthLabel(calendarMonth)}</p>
+          <button
+            type="button"
+            onClick={() => onChangeMonth(1)}
+            aria-label="Next month"
+            className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="size-4 fill-none stroke-current stroke-2"
+            >
+              <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-500">
+          {weekdayLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+
+        <div className="mt-2 grid grid-cols-7 gap-1">
+          {calendarDates.map((date) => {
+            const value = toDateValue(date);
+            const isCurrentMonth = date.getMonth() === calendarMonth.getMonth();
+            const isSelected = selectedVisitDate === value;
+
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onSelectDate(date)}
+                className={`aspect-square cursor-pointer rounded-full text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100 ${
+                  isSelected
+                    ? "bg-brand-deep text-white"
+                    : isCurrentMonth
+                      ? "text-slate-800 hover:bg-sky-50"
+                      : "text-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                {date.getDate()}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export function PropertyAgentContactCard({
   agentImageSrc,
   agentName,
@@ -97,6 +217,25 @@ export function PropertyAgentContactCard({
   const changeCalendarMonth = (offset: number) => {
     setCalendarMonth((current) => new Date(current.getFullYear(), current.getMonth() + offset, 1));
   };
+
+  useEffect(() => {
+    if (!isCalendarOpen) return;
+
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsCalendarOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCalendarOpen]);
 
   return (
     <>
@@ -347,107 +486,6 @@ export function PropertyAgentContactCard({
         </form>
       ) : null}
 
-      {isCalendarOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-slate-950/45 px-5 py-8 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Choose visit date"
-          onClick={() => setIsCalendarOpen(false)}
-        >
-          <div
-            className="w-full max-w-md cursor-default rounded-[1.5rem] bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.28)]"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-semibold text-slate-950">Visit date</h2>
-                <p className="mt-1 text-sm text-slate-500">Choose when you want to visit.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsCalendarOpen(false)}
-                aria-label="Close calendar popup"
-                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="size-5 fill-none stroke-current stroke-2"
-                >
-                  <path d="M6 6 18 18" strokeLinecap="round" />
-                  <path d="M18 6 6 18" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="mt-5 flex items-center justify-between gap-2">
-              <button
-                type="button"
-                onClick={() => changeCalendarMonth(-1)}
-                aria-label="Previous month"
-                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="size-4 fill-none stroke-current stroke-2"
-                >
-                  <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <p className="text-sm font-semibold text-slate-950">
-                {formatMonthLabel(calendarMonth)}
-              </p>
-              <button
-                type="button"
-                onClick={() => changeCalendarMonth(1)}
-                aria-label="Next month"
-                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="size-4 fill-none stroke-current stroke-2"
-                >
-                  <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-500">
-              {weekdayLabels.map((label) => (
-                <span key={label}>{label}</span>
-              ))}
-            </div>
-
-            <div className="mt-2 grid grid-cols-7 gap-1">
-              {calendarDates.map((date) => {
-                const value = toDateValue(date);
-                const isCurrentMonth = date.getMonth() === calendarMonth.getMonth();
-                const isSelected = selectedVisitDate === value;
-
-                return (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => selectVisitDate(date)}
-                    className={`aspect-square cursor-pointer rounded-full text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100 ${
-                      isSelected
-                        ? "bg-brand-deep text-white"
-                        : isCurrentMonth
-                          ? "text-slate-800 hover:bg-sky-50"
-                          : "text-slate-300 hover:bg-slate-50"
-                    }`}
-                  >
-                    {date.getDate()}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ) : null}
         </section>
       ) : null}
 
@@ -613,108 +651,6 @@ export function PropertyAgentContactCard({
                     +
                   </button>
                 </div>
-
-                {isCalendarOpen ? (
-                  <div
-                    className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-slate-950/45 px-5 py-8 backdrop-blur-md"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="Choose visit date"
-                    onClick={() => setIsCalendarOpen(false)}
-                  >
-                    <div
-                      className="w-full max-w-md cursor-default rounded-[1.5rem] bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.28)]"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <h2 className="text-xl font-semibold text-slate-950">Visit date</h2>
-                          <p className="mt-1 text-sm text-slate-500">Choose when you want to visit.</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setIsCalendarOpen(false)}
-                          aria-label="Close calendar popup"
-                          className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
-                        >
-                          <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            className="size-5 fill-none stroke-current stroke-2"
-                          >
-                            <path d="M6 6 18 18" strokeLinecap="round" />
-                            <path d="M18 6 6 18" strokeLinecap="round" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <div className="mt-5 flex items-center justify-between gap-2">
-                        <button
-                          type="button"
-                          onClick={() => changeCalendarMonth(-1)}
-                          aria-label="Previous month"
-                          className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
-                        >
-                          <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            className="size-4 fill-none stroke-current stroke-2"
-                          >
-                            <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </button>
-                        <p className="text-sm font-semibold text-slate-950">
-                          {formatMonthLabel(calendarMonth)}
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => changeCalendarMonth(1)}
-                          aria-label="Next month"
-                          className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-50"
-                        >
-                          <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            className="size-4 fill-none stroke-current stroke-2"
-                          >
-                            <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-500">
-                        {weekdayLabels.map((label) => (
-                          <span key={label}>{label}</span>
-                        ))}
-                      </div>
-
-                      <div className="mt-2 grid grid-cols-7 gap-1">
-                        {calendarDates.map((date) => {
-                          const value = toDateValue(date);
-                          const isCurrentMonth = date.getMonth() === calendarMonth.getMonth();
-                          const isSelected = selectedVisitDate === value;
-
-                          return (
-                            <button
-                              key={value}
-                              type="button"
-                              onClick={() => selectVisitDate(date)}
-                              className={`aspect-square cursor-pointer rounded-full text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100 ${
-                                isSelected
-                                  ? "bg-brand-deep text-white"
-                                  : isCurrentMonth
-                                    ? "text-slate-800 hover:bg-sky-50"
-                                    : "text-slate-300 hover:bg-slate-50"
-                              }`}
-                            >
-                              {date.getDate()}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
               </div>
             </label>
             <label className="block">
@@ -818,6 +754,17 @@ export function PropertyAgentContactCard({
         )}
       </div>
         </div>
+      ) : null}
+
+      {isCalendarOpen ? (
+        <VisitCalendarDialog
+          calendarDates={calendarDates}
+          calendarMonth={calendarMonth}
+          onChangeMonth={changeCalendarMonth}
+          onClose={() => setIsCalendarOpen(false)}
+          onSelectDate={selectVisitDate}
+          selectedVisitDate={selectedVisitDate}
+        />
       ) : null}
     </>
   );

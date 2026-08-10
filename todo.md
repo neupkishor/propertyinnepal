@@ -2,5 +2,5 @@
 - [ ] Investigate why `https://api.propertyinnepal.com.np/api/V1/filter-properties/...` returns empty results for known sale/rent inventory and replace the temporary app-side filtering workaround.
 - [ ] Replace page-level `<img>` elements with `next/image` or an approved image loader to clear Next.js lint optimization warnings.
 - [ ] Replace the agent contact card `<img>` with `next/image` or an approved image loader to clear the Next.js lint optimization warning.
-- [ ] Fix `components/property-share-button.tsx` `react-hooks/set-state-in-effect` lint error when opening the share modal.
+- [ ] Replace the property photo gallery `<img>` elements with `next/image` or an approved image loader to clear Next.js lint optimization warnings.
 - [ ] Fix existing ESLint errors in `core` and `logica` (`no-explicit-any`, `prefer-const`, `react-hooks/set-state-in-effect`, unsafe `Function`, and unused disable comments).
