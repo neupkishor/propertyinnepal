@@ -231,7 +231,7 @@ export function PropertyLifeAroundArea({ areaName }: PropertyLifeAroundAreaProps
   const showToggle = filteredItems.length > collapsedRowCount;
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full">
       <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
         <div className="flex items-start justify-between gap-4">
           <div>

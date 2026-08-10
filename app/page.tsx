@@ -413,7 +413,7 @@ export default async function Home() {
 
   return (
     <>
-      <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden bg-slate-950 pt-[88px] text-white">
+      <section className="relative isolate -mt-[88px] flex min-h-[78svh] w-full overflow-hidden pt-[88px] text-white">
         <HeroBackgroundVideo
           src="/hero-video.mp4"
           className="absolute inset-0 h-full w-full object-cover object-center"
@@ -478,7 +478,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-9 lg:py-11">
+      <section className="py-9 lg:py-11">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8 lg:pl-24 xl:pl-28 2xl:pl-0">
           <h2 className="font-display text-[1.35rem] font-bold leading-tight text-slate-950 sm:text-[1.75rem] lg:text-[1.95rem]">
             Property Categories
@@ -589,7 +589,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-14">
+      <section className="py-14">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8 lg:pl-24 xl:pl-28 2xl:pl-0">
           <div className="max-w-3xl">
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
@@ -704,7 +704,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#eef4fa] py-14 text-slate-950">
+      <section className="py-14 text-slate-950">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8 lg:pl-24 xl:pl-28 2xl:pl-0">
           <div className="max-w-3xl">
             <h2 className="font-display text-[1.4rem] font-bold leading-tight sm:text-[1.85rem] lg:text-[2.05rem]">

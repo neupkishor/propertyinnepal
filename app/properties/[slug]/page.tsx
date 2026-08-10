@@ -287,7 +287,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <section className="w-full bg-[#eef4fa] lg:hidden">
+        <section className="w-full lg:hidden">
           <div className="mx-auto max-w-[1440px] px-6 py-8">
             <PropertyAgentContactCard
               agentImageSrc={property.team_image}
@@ -299,7 +299,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <section className="w-full bg-white lg:bg-[#eef4fa]">
+        <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -352,7 +352,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <section className="w-full bg-white">
+        <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -386,7 +386,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
         <PropertyLifeAroundArea areaName={propertyLocation || property.location || property.city} />
 
-        <section className="w-full bg-[#eef4fa]">
+        <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12 lg:pr-[calc(360px+40px+2rem)]">
             <article className="max-w-5xl">
               <h2 className="text-2xl font-semibold text-slate-950">About This Property</h2>
@@ -427,7 +427,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         </section>
 
         {recommendedProperties.length ? (
-          <section className="w-full bg-white">
+          <section className="w-full">
             <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12 lg:pr-[calc(360px+40px+2rem)]">
               <div className="flex items-end justify-between gap-4">
                 <div>
@@ -458,7 +458,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </section>
         ) : null}
 
-        <section className="w-full bg-white">
+        <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:pr-[calc(360px+40px+2rem)]">
             <div className="flex flex-wrap gap-3">
               <Link

@@ -8,6 +8,7 @@
   --border: rgba(15, 23, 42, 0.08);
   --brand: #00b4ea;
   --brand-deep: #1f3b7b;
+  --section-alt: #eef4fa;
 }
 
 @theme inline {
@@ -30,6 +31,37 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
+}
+
+header {
+  background: #ffffff !important;
+}
+
+main section {
+  position: relative;
+}
+
+main section:nth-of-type(odd) {
+  background: #ffffff !important;
+  box-shadow: 0 0 0 100vmax #ffffff;
+  clip-path: inset(0 -100vmax);
+}
+
+main section:nth-of-type(even) {
+  background: var(--section-alt) !important;
+  box-shadow: 0 0 0 100vmax var(--section-alt);
+  clip-path: inset(0 -100vmax);
+}
+
+main section section {
+  background: transparent !important;
+  box-shadow: none;
+  clip-path: none;
+}
+
+footer {
+  background: var(--brand-deep) !important;
+  color: #ffffff;
 }
 
 ::selection {
