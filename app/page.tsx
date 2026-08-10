@@ -651,10 +651,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-6 py-14 lg:px-8 lg:pl-24 xl:pl-28 2xl:pl-0">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
-          <div className="relative mx-auto w-full max-w-2xl">
-            <div className="overflow-hidden rounded-xl border-[18px] border-slate-200 bg-white">
+      <section className="mx-auto max-w-[1440px] overflow-hidden px-4 py-14 sm:px-6 lg:px-8 lg:pl-24 xl:pl-28 2xl:pl-0">
+        <div className="grid min-w-0 items-center gap-10 xl:grid-cols-[0.95fr_1.05fr] xl:gap-14">
+          <div className="relative mx-auto w-full min-w-0 max-w-2xl">
+            <div className="overflow-hidden rounded-xl border-[10px] border-slate-200 bg-white sm:border-[18px]">
               <img
                 src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=85"
                 alt="Property advisor handing keys to a home buyer"
@@ -666,22 +666,22 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute -left-4 top-1/2 grid -translate-y-1/2 gap-2 rounded-lg bg-brand px-5 py-5 text-white shadow-[0_8px_20px_rgba(0,180,234,0.2)] sm:-left-8">
-              <span className="text-2xl font-bold leading-none">1,200+</span>
+            <div className="absolute left-3 top-1/2 grid -translate-y-1/2 gap-1 rounded-lg bg-brand px-3 py-3 text-white shadow-[0_8px_20px_rgba(0,180,234,0.2)] sm:-left-4 sm:gap-2 sm:px-5 sm:py-5 xl:-left-8">
+              <span className="text-xl font-bold leading-none sm:text-2xl">1,200+</span>
               <span className="text-sm font-medium leading-tight">clients served</span>
             </div>
 
-            <div className="absolute -bottom-4 right-4 rounded-lg bg-brand-deep px-5 py-4 text-white shadow-[0_8px_20px_rgba(31,59,123,0.18)] sm:right-8">
-              <span className="block text-2xl font-bold leading-none">500+</span>
+            <div className="absolute -bottom-3 right-3 rounded-lg bg-brand-deep px-4 py-3 text-white shadow-[0_8px_20px_rgba(31,59,123,0.18)] sm:-bottom-4 sm:right-8 sm:px-5 sm:py-4">
+              <span className="block text-xl font-bold leading-none sm:text-2xl">500+</span>
               <span className="mt-1 block text-sm font-medium leading-tight">properties matched</span>
             </div>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h2 className="font-display text-[1.75rem] font-bold leading-tight text-slate-950 sm:text-[2.25rem] lg:text-[2.55rem]">
               Why Choose Us?
             </h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-slate-700">
+            <p className="mt-5 max-w-3xl text-base leading-8 text-slate-700 break-words">
               As Nepal&apos;s dedicated real estate specialists, we bring deep local expertise to help you
               navigate the city&apos;s most promising property opportunities. We pride ourselves on a
               foundation of absolute transparency and integrity, ensuring that every transaction is
@@ -692,20 +692,20 @@ export default async function Home() {
               and is committed to turning your vision of a perfect home into a reality.
             </p>
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <DragScrollCarousel className="no-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth scroll-pl-4 px-4 pb-2 sm:-mx-6 sm:scroll-pl-6 sm:px-6">
+              <div className="min-w-[13rem] snap-start rounded-lg border border-slate-200 bg-white p-4">
                 <p className="text-xl font-bold text-brand-deep">35+</p>
                 <p className="mt-1 text-sm text-slate-600">real estate advisors</p>
               </div>
-              <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="min-w-[13rem] snap-start rounded-lg border border-slate-200 bg-white p-4">
                 <p className="text-xl font-bold text-brand-deep">96%</p>
                 <p className="mt-1 text-sm text-slate-600">closing satisfaction</p>
               </div>
-              <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="min-w-[13rem] snap-start rounded-lg border border-slate-200 bg-white p-4">
                 <p className="text-xl font-bold text-brand-deep">15+</p>
                 <p className="mt-1 text-sm text-slate-600">years in market</p>
               </div>
-            </div>
+            </DragScrollCarousel>
           </div>
         </div>
       </section>
