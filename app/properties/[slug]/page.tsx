@@ -183,8 +183,8 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <aside className="mx-auto max-w-[1440px] px-6 pb-8 lg:hidden">
-          <div>
+        <section className="w-full bg-[#eef4fa] lg:hidden">
+          <div className="mx-auto max-w-[1440px] px-6 py-8">
             <PropertyAgentContactCard
               agentImageSrc={property.team_image}
               agentName={agentName}
@@ -193,9 +193,9 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
               email={PROPERTY_AGENT_FALLBACK.email}
             />
           </div>
-        </aside>
+        </section>
 
-        <section className="w-full bg-[#eef4fa]">
+        <section className="w-full bg-white lg:bg-[#eef4fa]">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
             <div className="flex items-start justify-between gap-4">
               <div>
