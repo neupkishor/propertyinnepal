@@ -244,7 +244,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
         ) : null}
       </section>
 
-      <div className="relative pb-16 lg:pb-24">
+      <div className="relative overflow-hidden">
         <PropertyFloatingAgentSidebar>
           <PropertyAgentContactCard
             agentImageSrc={property.team_image}
@@ -287,7 +287,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <section className="w-full lg:hidden">
+        <div className="w-full lg:hidden">
           <div className="mx-auto max-w-[1440px] px-6 py-8">
             <PropertyAgentContactCard
               agentImageSrc={property.team_image}
@@ -297,7 +297,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
               email={PROPERTY_AGENT_FALLBACK.email}
             />
           </div>
-        </section>
+        </div>
 
         <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
@@ -425,58 +425,58 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
             </article>
           </div>
         </section>
+      </div>
 
-        {recommendedProperties.length ? (
-          <section className="w-full">
-            <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12 lg:pr-[calc(360px+40px+2rem)]">
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-semibold text-slate-950">
-                    Recommended Properties
-                  </h2>
-                  <p className="mt-1 text-sm text-slate-600">
-                    Similar verified listings selected from current property inventory.
-                  </p>
-                </div>
-                <Link
-                  href="/properties"
-                  className="hidden text-sm font-semibold text-brand-deep transition hover:text-slate-950 sm:inline-flex"
-                >
-                  View all properties
-                </Link>
-              </div>
-
-              <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {recommendedProperties.map((recommendedProperty) => (
-                  <RecommendedPropertyCard
-                    key={recommendedProperty.id}
-                    property={recommendedProperty}
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
-
+      {recommendedProperties.length ? (
         <section className="w-full">
-          <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:pr-[calc(360px+40px+2rem)]">
-            <div className="flex flex-wrap gap-3">
+          <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-semibold text-slate-950">
+                  Recommended Properties
+                </h2>
+                <p className="mt-1 text-sm text-slate-600">
+                  Similar verified listings selected from current property inventory.
+                </p>
+              </div>
               <Link
                 href="/properties"
-                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+                className="hidden text-sm font-semibold text-brand-deep transition hover:text-slate-950 sm:inline-flex"
               >
-                Back to listings
+                View all properties
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5"
-              >
-                Request viewing
-              </Link>
+            </div>
+
+            <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {recommendedProperties.map((recommendedProperty) => (
+                <RecommendedPropertyCard
+                  key={recommendedProperty.id}
+                  property={recommendedProperty}
+                />
+              ))}
             </div>
           </div>
         </section>
-      </div>
+      ) : null}
+
+      <section className="w-full">
+        <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8">
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/properties"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+            >
+              Back to listings
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5"
+            >
+              Request viewing
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
