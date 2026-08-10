@@ -442,19 +442,19 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
             <DragScrollCarousel
               autoScrollIntervalMs={6500}
-              className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden"
+              className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8"
             >
               {recommendedProperties.map((recommendedProperty) => (
                 <div
                   key={recommendedProperty.id}
-                  className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
+                  className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
                 >
                   <RecommendedPropertyCard property={recommendedProperty} />
                 </div>
               ))}
               <Link
                 href="/properties"
-                className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
+                className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
               >
                 <span className="text-xl font-bold leading-tight">
                   View more properties
@@ -472,15 +472,6 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
                 </span>
               </Link>
             </DragScrollCarousel>
-
-            <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
-              {recommendedProperties.map((recommendedProperty) => (
-                <RecommendedPropertyCard
-                  key={recommendedProperty.id}
-                  property={recommendedProperty}
-                />
-              ))}
-            </div>
           </div>
         </section>
       ) : null}

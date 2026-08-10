@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+
+import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 
 type LifeCategory = "Essentials" | "Dining" | "Transport" | "Lifestyle" | "Character";
 
@@ -17,8 +19,6 @@ type PropertyLifeAroundAreaProps = {
 };
 
 const CATEGORY_FILTERS = ["All", "Essentials", "Dining", "Transport", "Lifestyle", "Character"] as const;
-const CARD_MIN_WIDTH = 150;
-const CARD_GAP = 12;
 
 const LIFE_AROUND_ITEMS: LifeAroundItem[] = [
   {
@@ -196,39 +196,11 @@ function Rating({ value }: { value: number }) {
 
 export function PropertyLifeAroundArea({ areaName }: PropertyLifeAroundAreaProps) {
   const [activeCategory, setActiveCategory] = useState<(typeof CATEGORY_FILTERS)[number]>("All");
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [collapsedRowCount, setCollapsedRowCount] = useState(1);
-  const gridRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-
-    const updateCollapsedRowCount = () => {
-      const width = grid.clientWidth;
-      if (!width) return;
-
-      setCollapsedRowCount(
-        Math.max(1, Math.floor((width + CARD_GAP) / (CARD_MIN_WIDTH + CARD_GAP))),
-      );
-    };
-
-    updateCollapsedRowCount();
-
-    const observer = new ResizeObserver(updateCollapsedRowCount);
-    observer.observe(grid);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   const filteredItems = useMemo(() => {
     if (activeCategory === "All") return LIFE_AROUND_ITEMS;
     return LIFE_AROUND_ITEMS.filter((item) => item.category === activeCategory);
   }, [activeCategory]);
-  const visibleItems = isExpanded ? filteredItems : filteredItems.slice(0, collapsedRowCount);
-  const showToggle = filteredItems.length > collapsedRowCount;
 
   return (
     <section className="w-full">
@@ -256,10 +228,7 @@ export function PropertyLifeAroundArea({ areaName }: PropertyLifeAroundAreaProps
               <button
                 key={category}
                 type="button"
-                onClick={() => {
-                  setActiveCategory(category);
-                  setIsExpanded(false);
-                }}
+                onClick={() => setActiveCategory(category)}
                 className={`inline-flex cursor-pointer items-center justify-center rounded-full border px-3.5 py-2 text-sm font-semibold transition-colors duration-200 ${
                   isActive
                     ? "border-brand-deep bg-brand-deep text-white"
@@ -272,15 +241,15 @@ export function PropertyLifeAroundArea({ areaName }: PropertyLifeAroundAreaProps
           })}
         </div>
 
-        <div
-          ref={gridRef}
-          className="mt-5 grid gap-3"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))" }}
+        <DragScrollCarousel
+          key={activeCategory}
+          autoScrollIntervalMs={6500}
+          className="no-scrollbar -mx-6 mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-3 sm:-mx-8 sm:scroll-pl-8 sm:px-8"
         >
-          {visibleItems.map((item) => (
+          {filteredItems.map((item) => (
             <article
               key={`${item.category}-${item.label}`}
-              className="cursor-pointer rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center transition-colors duration-200 hover:border-brand-deep/30 hover:bg-slate-100/90"
+              className="w-[68vw] max-w-[230px] shrink-0 snap-start cursor-pointer rounded-2xl border border-slate-200/70 bg-slate-50/70 p-4 text-center transition-colors duration-200 hover:border-brand-deep/30 hover:bg-slate-100/90 sm:w-[210px] lg:w-[178px] xl:w-[190px]"
             >
               <div className="flex min-h-[112px] flex-col items-center justify-center sm:min-h-[124px]">
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[linear-gradient(180deg,rgba(0,180,234,0.14),rgba(31,59,123,0.08))] text-brand-deep sm:size-10">
@@ -296,20 +265,7 @@ export function PropertyLifeAroundArea({ areaName }: PropertyLifeAroundAreaProps
               </div>
             </article>
           ))}
-        </div>
-
-        {!isExpanded && showToggle ? (
-          <div className="mt-4">
-            <button
-              type="button"
-              onClick={() => setIsExpanded(true)}
-              aria-expanded={isExpanded}
-              className="inline-flex cursor-pointer items-center justify-center rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-semibold text-brand-deep transition-colors duration-200 hover:bg-slate-100"
-            >
-              View more
-            </button>
-          </div>
-        ) : null}
+        </DragScrollCarousel>
 
         <p className="mt-5 max-w-3xl text-xs leading-5 text-slate-500">
           These signals are general area insights for the listed property and should not be

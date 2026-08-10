@@ -402,14 +402,14 @@ export default async function Home() {
   ]);
   const premiumListings = premiumPayload.data ?? [];
   const recentListings = recentPayload.items ?? [];
-  const latestBlogs = (blogsPayload.data ?? []).slice(0, 4);
+  const latestBlogs = (blogsPayload.data ?? []).slice(0, 8);
   const featuredListings = premiumListings
     .filter((property) => property.is_featured === "1")
     .slice(0, 8);
   const homepageFeaturedListings =
     featuredListings.length > 0 ? featuredListings : premiumListings.slice(0, 8);
-  const premiumPreviewListings = homepageFeaturedListings.slice(0, 4);
-  const recentPreviewListings = recentListings.slice(0, 4);
+  const premiumPreviewListings = homepageFeaturedListings.slice(0, 8);
+  const recentPreviewListings = recentListings.slice(0, 8);
 
   return (
     <>
@@ -549,17 +549,17 @@ export default async function Home() {
           </p>
         </div>
 
-        <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
+        <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8">
           {premiumPreviewListings.map((property) => (
             <PremiumPropertyCard
               key={property.id}
               property={property}
-              className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
+              className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
             />
           ))}
           <Link
             href="/properties?listing=premium"
-            className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
+            className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
           >
             <span className="text-xl font-bold leading-tight">
               See more similar properties
@@ -577,16 +577,6 @@ export default async function Home() {
             </span>
           </Link>
         </DragScrollCarousel>
-
-        <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
-          {premiumPreviewListings.map((property) => (
-            <PremiumPropertyCard
-              key={property.id}
-              property={property}
-              className="min-w-0"
-            />
-          ))}
-        </div>
       </section>
 
       <section className="py-14">
@@ -604,17 +594,17 @@ export default async function Home() {
             </p>
           </div>
 
-          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
+          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8">
             {recentPreviewListings.map((property) => (
               <PremiumPropertyCard
                 key={property.id}
                 property={property}
-                className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
+                className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
               />
             ))}
             <Link
               href="/properties"
-              className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-white p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
+              className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-white p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
             >
               <span className="text-xl font-bold leading-tight">
                 See more recent properties
@@ -632,16 +622,6 @@ export default async function Home() {
               </span>
             </Link>
           </DragScrollCarousel>
-
-          <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
-            {recentPreviewListings.map((property) => (
-              <PremiumPropertyCard
-                key={property.id}
-                property={property}
-                className="min-w-0"
-              />
-            ))}
-          </div>
         </div>
       </section>
 
@@ -777,17 +757,17 @@ export default async function Home() {
             </p>
           </div>
 
-          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
+          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8">
             {latestBlogs.map((blog) => (
               <BlogPreviewCard
                 key={blog.id}
                 blog={blog}
-                className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
+                className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
               />
             ))}
             <Link
               href="/blogs"
-              className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
+              className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw] xl:w-[320px]"
             >
               <span className="text-xl font-bold leading-tight">
                 Read more blogs
@@ -805,12 +785,6 @@ export default async function Home() {
               </span>
             </Link>
           </DragScrollCarousel>
-
-          <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
-            {latestBlogs.map((blog) => (
-              <BlogPreviewCard key={blog.id} blog={blog} className="min-w-0" />
-            ))}
-          </div>
         </section>
       ) : null}
 
