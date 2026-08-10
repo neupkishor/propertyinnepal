@@ -223,7 +223,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
   const recommendedProperties = recommendedPayload.data
     .filter((item) => item.id !== property.id && item.slug !== property.slug)
-    .slice(0, 3);
+    .slice(0, 8);
   const roomsAndSpacingFeatures = getRoomsAndSpacingFeatures(property.features, property.area);
   const aboutFeatureList = formatAboutFeatureList(roomsAndSpacingFeatures);
   const amenityList = getAmenityList(property.facilities);
@@ -252,6 +252,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
             agentRole={agentRole}
             phone={PROPERTY_AGENT_FALLBACK.phone}
             email={PROPERTY_AGENT_FALLBACK.email}
+            display="desktop"
           />
         </PropertyFloatingAgentSidebar>
 
@@ -287,17 +288,15 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           </div>
         </section>
 
-        <div className="w-full lg:hidden">
-          <div className="mx-auto max-w-[1440px] px-6 py-8">
-            <PropertyAgentContactCard
-              agentImageSrc={property.team_image}
-              agentName={agentName}
-              agentRole={agentRole}
-              phone={PROPERTY_AGENT_FALLBACK.phone}
-              email={PROPERTY_AGENT_FALLBACK.email}
-            />
-          </div>
-        </div>
+        <PropertyAgentContactCard
+          agentImageSrc={property.team_image}
+          agentName={agentName}
+          agentRole={agentRole}
+          phone={PROPERTY_AGENT_FALLBACK.phone}
+          email={PROPERTY_AGENT_FALLBACK.email}
+          display="mobile"
+          mobileClassName="mx-auto max-w-[1440px] px-6 pb-8 pt-6"
+        />
 
         <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8 lg:py-10 lg:pr-[calc(360px+40px+2rem)]">
@@ -430,7 +429,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
       {recommendedProperties.length ? (
         <section className="w-full">
           <div className="mx-auto max-w-[1440px] px-6 py-10 sm:px-8 lg:px-8 lg:py-12">
-            <div className="flex items-end justify-between gap-4">
+            <div>
               <div>
                 <h2 className="text-2xl font-semibold text-slate-950">
                   Recommended Properties
@@ -439,44 +438,44 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
                   Similar verified listings selected from current property inventory.
                 </p>
               </div>
-              <Link
-                href="/properties"
-                className="hidden text-sm font-semibold text-brand-deep transition hover:text-slate-950 sm:inline-flex"
-              >
-                View all properties
-              </Link>
             </div>
 
-            <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <DragScrollCarousel
+              autoScrollIntervalMs={6500}
+              className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8 lg:-mx-8 lg:px-8"
+            >
               {recommendedProperties.map((recommendedProperty) => (
-                <RecommendedPropertyCard
+                <div
                   key={recommendedProperty.id}
-                  property={recommendedProperty}
-                />
+                  className="w-full shrink-0 snap-start sm:w-[calc((100%_-_1.25rem)_/_2)] lg:w-[calc((100%_-_2.5rem)_/_3)] xl:w-[calc((100%_-_3.75rem)_/_4)]"
+                >
+                  <RecommendedPropertyCard property={recommendedProperty} />
+                </div>
               ))}
-            </div>
+              <Link
+                href="/properties"
+                className="inline-flex w-full shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[calc((100%_-_1.25rem)_/_2)] lg:w-[calc((100%_-_2.5rem)_/_3)] xl:w-[calc((100%_-_3.75rem)_/_4)]"
+              >
+                <span className="text-xl font-bold leading-tight">
+                  View more properties
+                </span>
+                <span className="mt-10 inline-flex items-center gap-2 text-sm font-semibold">
+                  Browse all listings
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="size-4 fill-none stroke-current stroke-2"
+                  >
+                    <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </Link>
+            </DragScrollCarousel>
           </div>
         </section>
       ) : null}
 
-      <section className="w-full">
-        <div className="mx-auto max-w-[1440px] px-6 py-8 sm:px-8 lg:px-8">
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/properties"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-            >
-              Back to listings
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(135deg,#00B4EA,#1F3B7B)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition duration-300 hover:-translate-y-0.5"
-            >
-              Request viewing
-            </Link>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

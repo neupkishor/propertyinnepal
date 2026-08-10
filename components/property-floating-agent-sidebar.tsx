@@ -7,6 +7,7 @@ type PropertyFloatingAgentSidebarProps = {
 };
 
 const HEADER_GAP = 112;
+const BOTTOM_STOP_GAP = HEADER_GAP;
 const FOOTER_GAP = 24;
 
 function clamp(value: number, minimum: number, maximum: number) {
@@ -36,7 +37,7 @@ export function PropertyFloatingAgentSidebar({
     const containerTop = containerRect.top + window.scrollY;
     const containerHeight = container.offsetHeight;
     const cardHeight = card.offsetHeight;
-    const maxOffset = Math.max(0, containerHeight - cardHeight);
+    const maxOffset = Math.max(0, containerHeight - cardHeight - BOTTOM_STOP_GAP);
     const viewportRoom = window.innerHeight - HEADER_GAP - FOOTER_GAP;
     const nextOffset =
       cardHeight <= viewportRoom

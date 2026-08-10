@@ -9,6 +9,8 @@ type PropertyAgentContactCardProps = {
   agentRole?: string | null;
   email: string;
   phone: string;
+  display?: "all" | "mobile" | "desktop";
+  mobileClassName?: string;
 };
 
 type TabId = "visit" | "inquiry";
@@ -61,6 +63,8 @@ export function PropertyAgentContactCard({
   agentRole,
   email,
   phone,
+  display = "all",
+  mobileClassName,
 }: PropertyAgentContactCardProps) {
   const [activeTab, setActiveTab] = useState<TabId>("visit");
   const [mobileActiveTab, setMobileActiveTab] = useState<TabId | null>(null);
@@ -80,6 +84,9 @@ export function PropertyAgentContactCard({
     { label: "", date: getDateWithOffset(2) },
   ];
   const calendarDates = getCalendarDates(calendarMonth);
+  const showMobile = display !== "desktop";
+  const showDesktop = display !== "mobile";
+  const mobileSectionClassName = ["lg:hidden", mobileClassName].filter(Boolean).join(" ");
 
   const selectVisitDate = (date: Date) => {
     setSelectedVisitDate(toDateValue(date));
@@ -93,10 +100,11 @@ export function PropertyAgentContactCard({
 
   return (
     <>
-    <section className="lg:hidden">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-deep/75">
-        Listed by:
-      </p>
+      {showMobile ? (
+        <section className={mobileSectionClassName}>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-deep/75">
+            Listed by:
+          </p>
 
       <div className="mt-3 flex items-center gap-3">
         <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -440,9 +448,11 @@ export function PropertyAgentContactCard({
           </div>
         </div>
       ) : null}
-    </section>
+        </section>
+      ) : null}
 
-    <div className="hidden overflow-hidden rounded-[1.6rem] border border-slate-200/80 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:block">
+      {showDesktop ? (
+        <div className="hidden overflow-hidden rounded-[1.6rem] border border-slate-200/80 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:block">
       <div className="bg-[linear-gradient(135deg,rgba(0,180,234,0.12),rgba(31,59,123,0.08))] px-5 pb-4 pt-5">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-deep/80">
           Listed by
@@ -807,7 +817,8 @@ export function PropertyAgentContactCard({
           </form>
         )}
       </div>
-    </div>
+        </div>
+      ) : null}
     </>
   );
 }
