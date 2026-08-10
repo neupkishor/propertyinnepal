@@ -160,18 +160,126 @@ function getAmenityList(facilities: PropertyFeature[]) {
   );
 }
 
+type RoomsAndSpacingIconName =
+  | "bed"
+  | "shower"
+  | "sofa"
+  | "utensils"
+  | "car"
+  | "bike"
+  | "area"
+  | "floors"
+  | "default";
+
+function getRoomsAndSpacingIconName(name: string): RoomsAndSpacingIconName {
+  const normalizedName = name.toLowerCase().replace(/[^a-z]/g, "");
+
+  if (normalizedName === "bedroom" || normalizedName === "bedrooms") return "bed";
+  if (normalizedName === "bathroom" || normalizedName === "bathrooms") return "shower";
+  if (normalizedName === "livingroom" || normalizedName === "livingrooms") return "sofa";
+  if (normalizedName === "kitchen" || normalizedName === "kitchens") return "utensils";
+  if (normalizedName === "carparking" || normalizedName === "carparkings") return "car";
+  if (normalizedName === "bikeparking" || normalizedName === "bikeparkings") return "bike";
+  if (normalizedName === "area") return "area";
+  if (normalizedName === "floor" || normalizedName === "floors") return "floors";
+
+  return "default";
+}
+
+function RoomsAndSpacingIcon({ name }: { name: string }) {
+  const iconName = getRoomsAndSpacingIconName(name);
+  const className = "size-4 fill-none stroke-current stroke-[2] sm:size-[18px]";
+
+  if (iconName === "bed") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M3 11V6.5A1.5 1.5 0 0 1 4.5 5h4A2.5 2.5 0 0 1 11 7.5V11" />
+        <path d="M11 11V7.5A2.5 2.5 0 0 1 13.5 5h4A1.5 1.5 0 0 1 19 6.5V11" />
+        <path d="M3 11h18v7M3 18v-7M3 15h18" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "shower") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M4 12h16v2.5A4.5 4.5 0 0 1 15.5 19h-7A4.5 4.5 0 0 1 4 14.5V12Z" strokeLinejoin="round" />
+        <path d="M6 12V6.5A2.5 2.5 0 0 1 8.5 4H9a2 2 0 0 1 2 2" strokeLinecap="round" />
+        <path d="M9 8h4M7 21h10" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "sofa") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M7 12V8.5A2.5 2.5 0 0 1 9.5 6h5A2.5 2.5 0 0 1 17 8.5V12" />
+        <path d="M5 12h14a2 2 0 0 1 2 2v4H3v-4a2 2 0 0 1 2-2Z" strokeLinejoin="round" />
+        <path d="M5 20v-2M19 20v-2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "utensils") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M7 3v18M4 3v5a3 3 0 0 0 6 0V3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 3h5l-3 8h3l-5 10v-8h-3l3-10Z" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "car") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M5 13 7 7h10l2 6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 13h16v5H4z" strokeLinejoin="round" />
+        <path d="M7 18v2M17 18v2M7 15h.01M17 15h.01" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "bike") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <circle cx="6" cy="17" r="3" />
+        <circle cx="18" cy="17" r="3" />
+        <path d="M8.5 17h3.5l3-5H9.5l-1 5ZM15 12l3 5M11 9h3M13 9l-1 3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "area") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M4 4h16v16H4z" strokeLinejoin="round" />
+        <path d="M8 8h8v8H8z" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (iconName === "floors") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+        <path d="M4 18h16M6 14h12M8 10h8M10 6h4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6 18v-4M18 18v-4M8 14v-4M16 14v-4M10 10V6M14 10V6" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+      <path d="M4 12h16M12 4v16" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function RoomsAndSpacingCard({ feature }: { feature: { name: string; value: string } }) {
   return (
     <div className="cursor-pointer rounded-2xl border border-slate-200/80 bg-white p-3.5 text-center transition-colors duration-200 hover:border-brand-deep/35 hover:bg-sky-50/75 sm:p-4">
       <div className="flex min-h-[80px] flex-col items-center justify-center sm:min-h-[88px]">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[linear-gradient(180deg,rgba(0,180,234,0.14),rgba(31,59,123,0.08))] text-brand-deep sm:size-10">
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            className="size-4 fill-none stroke-current stroke-[2] sm:size-[18px]"
-          >
-            <path d="M4 12h16M12 4v16" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <RoomsAndSpacingIcon name={feature.name} />
         </div>
         <p className="mt-2 text-center text-[13px] font-semibold leading-[1.2] text-slate-950 sm:mt-2.5 sm:text-sm sm:leading-[1.25]">
           <span className="text-[15px] text-brand-deep sm:text-base">{feature.value}</span>{" "}
