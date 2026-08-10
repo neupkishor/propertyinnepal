@@ -311,9 +311,9 @@ function PremiumPropertyCard({
   );
 }
 
-function BlogPreviewCard({ blog }: { blog: BlogItem }) {
+function BlogPreviewCard({ blog, className = "" }: { blog: BlogItem; className?: string }) {
   return (
-    <article className="group/blog flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(31,59,123,0.035)] transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <article className={`group/blog flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(31,59,123,0.035)] transition duration-300 hover:-translate-y-0.5 hover:shadow-md ${className}`}>
       <Link href={`/blog/${blog.slug}`} className="block overflow-hidden bg-slate-100">
         <img
           src={blog.banner}
@@ -408,7 +408,7 @@ export default async function Home() {
   ]);
   const premiumListings = premiumPayload.data ?? [];
   const recentListings = recentPayload.items ?? [];
-  const latestBlogs = (blogsPayload.data ?? []).slice(0, 3);
+  const latestBlogs = (blogsPayload.data ?? []).slice(0, 4);
   const featuredListings = premiumListings
     .filter((property) => property.is_featured === "1")
     .slice(0, 8);
@@ -783,9 +783,38 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <DragScrollCarousel className="no-scrollbar -mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-4 xl:hidden">
             {latestBlogs.map((blog) => (
-              <BlogPreviewCard key={blog.id} blog={blog} />
+              <BlogPreviewCard
+                key={blog.id}
+                blog={blog}
+                className="w-[82vw] max-w-[360px] shrink-0 snap-start sm:w-[46vw] lg:w-[31vw]"
+              />
+            ))}
+            <Link
+              href="/blogs"
+              className="inline-flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col justify-between rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-slate-950 transition-colors duration-300 hover:border-brand-deep hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40 sm:w-[46vw] lg:w-[31vw]"
+            >
+              <span className="text-xl font-bold leading-tight">
+                Read more blogs
+              </span>
+              <span className="mt-10 inline-flex items-center gap-2 text-sm font-semibold">
+                View all articles
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="size-4 fill-none stroke-current stroke-2"
+                >
+                  <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="m13 6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </Link>
+          </DragScrollCarousel>
+
+          <div className="mt-6 hidden gap-5 xl:grid xl:grid-cols-4">
+            {latestBlogs.map((blog) => (
+              <BlogPreviewCard key={blog.id} blog={blog} className="min-w-0" />
             ))}
           </div>
         </section>
