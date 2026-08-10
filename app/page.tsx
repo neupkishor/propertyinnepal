@@ -496,7 +496,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1440px] lg:pl-16 xl:pl-20 2xl:pl-0">
           <DragScrollCarousel
             autoScrollIntervalMs={6000}
-            className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:gap-5 lg:scroll-pl-8 lg:px-8"
+            className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth scroll-pl-6 px-6 pb-2 lg:gap-5 lg:scroll-pl-8 lg:px-8 xl:hidden"
           >
             {quickCategories.map((category) => (
               <Link
@@ -517,6 +517,27 @@ export default async function Home() {
               </Link>
             ))}
           </DragScrollCarousel>
+
+          <div className="mt-6 hidden gap-5 px-8 pb-2 xl:grid xl:grid-cols-4 2xl:grid-cols-7">
+            {quickCategories.map((category) => (
+              <Link
+                key={category.label}
+                href={category.href}
+                className="group/category relative flex min-h-[142px] min-w-0 flex-col items-center justify-center overflow-hidden rounded-lg border border-slate-200/70 bg-white px-4 py-5 text-center text-slate-700 shadow-[0_2px_8px_rgba(31,59,123,0.035)] transition-colors duration-300 hover:border-brand-deep/20 hover:text-brand-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-300/40"
+              >
+                <span className="absolute inset-x-0 top-0 h-1 bg-brand-deep/80 opacity-0 transition-opacity duration-300 group-hover/category:opacity-100" />
+                <span className={`inline-flex size-16 items-center justify-center rounded-full ${category.tone} text-brand transition-colors duration-300 group-hover/category:text-brand-deep`}>
+                  <CategoryIcon icon={category.icon} />
+                </span>
+                <span className="mt-3 text-base font-bold leading-tight text-inherit">
+                  {category.label}
+                </span>
+                <span className="mt-2 text-xs font-normal leading-none text-slate-500">
+                  {category.count}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
