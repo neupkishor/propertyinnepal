@@ -640,7 +640,7 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute left-3 top-1/2 grid -translate-y-1/2 gap-1 rounded-lg bg-brand px-3 py-3 text-white shadow-[0_8px_20px_rgba(0,180,234,0.2)] sm:-left-4 sm:gap-2 sm:px-5 sm:py-5 xl:-left-8">
+            <div className="absolute right-4 top-4 grid gap-1 rounded-lg bg-brand px-3 py-3 text-white shadow-[0_8px_20px_rgba(0,180,234,0.2)] sm:right-8 sm:top-8 sm:gap-2 sm:px-5 sm:py-5">
               <span className="text-xl font-bold leading-none sm:text-2xl">1,200+</span>
               <span className="text-sm font-medium leading-tight">clients served</span>
             </div>
