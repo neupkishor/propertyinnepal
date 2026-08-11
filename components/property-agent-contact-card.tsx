@@ -188,13 +188,17 @@ export function PropertyAgentContactCard({
 }: PropertyAgentContactCardProps) {
   const [activeTab, setActiveTab] = useState<TabId>("visit");
   const [mobileActiveTab, setMobileActiveTab] = useState<TabId | null>(null);
+  const [visitName, setVisitName] = useState("");
   const [visitPhone, setVisitPhone] = useState("");
   const [visitEmail, setVisitEmail] = useState("");
+  const [visitMessage, setVisitMessage] = useState("");
   const [selectedVisitDate, setSelectedVisitDate] = useState(() => toDateValue(getDateWithOffset(0)));
   const [calendarMonth, setCalendarMonth] = useState(() => getDateWithOffset(0));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [inquiryName, setInquiryName] = useState("");
   const [inquiryPhone, setInquiryPhone] = useState("");
   const [inquiryEmail, setInquiryEmail] = useState("");
+  const [inquiryMessage, setInquiryMessage] = useState("");
   const socialItems = socialLinks.slice(0, 4);
   const visitNeedsContact = !visitPhone.trim() && !visitEmail.trim();
   const inquiryNeedsContact = !inquiryPhone.trim() && !inquiryEmail.trim();
@@ -346,7 +350,7 @@ export function PropertyAgentContactCard({
         <form className="mt-5 space-y-3" onSubmit={(event) => event.preventDefault()}>
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">When</span>
-            <input type="hidden" name="visitDate" value={selectedVisitDate} />
+            <input type="hidden" name="visitDate" value={selectedVisitDate ?? ""} />
             <div className="grid grid-cols-[repeat(3,minmax(0,1fr))_auto] gap-2">
               {quickVisitDates.map((item) => {
                 const value = toDateValue(item.date);
@@ -390,8 +394,11 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Name</span>
             <input
+              name="visitName"
               type="text"
               placeholder="Your full name"
+              value={visitName}
+              onChange={(event) => setVisitName(event.target.value)}
               required
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
             />
@@ -399,6 +406,7 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Contact number</span>
             <input
+              name="visitPhone"
               type="tel"
               placeholder="Phone number"
               value={visitPhone}
@@ -410,6 +418,7 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Email</span>
             <input
+              name="visitEmail"
               type="email"
               placeholder="Email address"
               value={visitEmail}
@@ -421,8 +430,11 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Message</span>
             <textarea
+              name="visitMessage"
               rows={2}
               placeholder="Add any visit notes"
+              value={visitMessage}
+              onChange={(event) => setVisitMessage(event.target.value)}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
             />
           </label>
@@ -440,8 +452,11 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Name</span>
             <input
+              name="inquiryName"
               type="text"
               placeholder="Your full name"
+              value={inquiryName}
+              onChange={(event) => setInquiryName(event.target.value)}
               required
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
             />
@@ -449,6 +464,7 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Contact number</span>
             <input
+              name="inquiryPhone"
               type="tel"
               placeholder="Phone number"
               value={inquiryPhone}
@@ -460,6 +476,7 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Email</span>
             <input
+              name="inquiryEmail"
               type="email"
               placeholder="Email address"
               value={inquiryEmail}
@@ -471,8 +488,11 @@ export function PropertyAgentContactCard({
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-slate-700">Message</span>
             <textarea
+              name="inquiryMessage"
               rows={3}
               placeholder="Tell us what you'd like to know"
+              value={inquiryMessage}
+              onChange={(event) => setInquiryMessage(event.target.value)}
               required
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
             />
@@ -610,7 +630,7 @@ export function PropertyAgentContactCard({
           >
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">When</span>
-              <input type="hidden" name="visitDate" value={selectedVisitDate} />
+              <input type="hidden" name="visitDate" value={selectedVisitDate ?? ""} />
               <div className="relative">
                 <div className="grid grid-cols-[repeat(3,minmax(0,1fr))_auto] gap-2">
                   {quickVisitDates.map((item) => {
@@ -656,8 +676,11 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Name</span>
               <input
+                name="visitName"
                 type="text"
                 placeholder="Your full name"
+                value={visitName}
+                onChange={(event) => setVisitName(event.target.value)}
                 required
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
               />
@@ -665,6 +688,7 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Contact number</span>
               <input
+                name="visitPhone"
                 type="tel"
                 placeholder="Phone number"
                 value={visitPhone}
@@ -676,6 +700,7 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Email</span>
               <input
+                name="visitEmail"
                 type="email"
                 placeholder="Email address"
                 value={visitEmail}
@@ -687,8 +712,11 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Message</span>
               <textarea
+                name="visitMessage"
                 rows={2}
                 placeholder="Add any visit notes"
+                value={visitMessage}
+                onChange={(event) => setVisitMessage(event.target.value)}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
               />
             </label>
@@ -707,8 +735,11 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Name</span>
               <input
+                name="inquiryName"
                 type="text"
                 placeholder="Your full name"
+                value={inquiryName}
+                onChange={(event) => setInquiryName(event.target.value)}
                 required
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
               />
@@ -716,6 +747,7 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Contact number</span>
               <input
+                name="inquiryPhone"
                 type="tel"
                 placeholder="Phone number"
                 value={inquiryPhone}
@@ -727,6 +759,7 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Email</span>
               <input
+                name="inquiryEmail"
                 type="email"
                 placeholder="Email address"
                 value={inquiryEmail}
@@ -738,8 +771,11 @@ export function PropertyAgentContactCard({
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-slate-700">Message</span>
               <textarea
+                name="inquiryMessage"
                 rows={3}
                 placeholder="Tell us what you'd like to know"
+                value={inquiryMessage}
+                onChange={(event) => setInquiryMessage(event.target.value)}
                 required
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
               />
