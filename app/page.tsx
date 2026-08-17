@@ -418,8 +418,6 @@ export default async function Home() {
           src="/hero-video.mp4"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.78)_0%,rgba(2,6,23,0.5)_42%,rgba(2,6,23,0.08)_75%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(2,6,23,0.68)_0%,transparent_55%)]" />
 
         <div className="relative mx-auto flex w-full max-w-[1440px] items-end px-6 py-14 sm:py-16 lg:px-8 lg:pl-24 lg:py-20 xl:pl-28 2xl:pl-0">
           <div className="max-w-3xl">
@@ -427,10 +425,10 @@ export default async function Home() {
               Find your next home in Nepal
             </p>
 
-            <h1 className="mt-6 font-display text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-white sm:text-4xl lg:text-6xl">
+            <h1 className="mt-6 font-display text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-white [text-shadow:0_2px_10px_rgba(2,6,23,0.9),0_10px_30px_rgba(2,6,23,0.7),0_0_22px_rgba(2,6,23,0.55)] sm:text-4xl lg:text-6xl">
               घर किन्दा सम्झिनु ल !
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/90 [text-shadow:0_2px_8px_rgba(2,6,23,0.9),0_8px_22px_rgba(2,6,23,0.65)] sm:text-lg sm:leading-8">
               Verified listings, serious seller inventory, and pricing clarity in NRS.
               Built for buyers and investors who want better options and faster decisions.
             </p>
@@ -467,7 +465,7 @@ export default async function Home() {
 
             <Link
               href="/properties"
-              className="mt-5 inline-flex items-center justify-center gap-3 text-sm font-semibold text-white transition hover:text-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/50"
+              className="mt-5 inline-flex items-center justify-center gap-3 text-sm font-semibold text-white [text-shadow:0_2px_8px_rgba(2,6,23,0.85)] transition hover:text-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/50"
             >
               Explore all properties
               <span aria-hidden className="text-xl leading-none">
