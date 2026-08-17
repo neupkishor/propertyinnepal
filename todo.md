@@ -4,3 +4,4 @@
 - [ ] Replace the agent contact card `<img>` with `next/image` or an approved image loader to clear the Next.js lint optimization warning.
 - [ ] Replace the property photo gallery `<img>` elements with `next/image` or an approved image loader to clear Next.js lint optimization warnings.
 - [ ] Fix existing ESLint errors in `core` and `logica` (`no-explicit-any`, `prefer-const`, `react-hooks/set-state-in-effect`, unsafe `Function`, and unused disable comments).
+- [ ] Restore the missing `@/core/database/prisma` dependency or update [logica/account/self.ts](/Users/neupkishor/Code/propertyinnepal/logica/account/self.ts:121) so the repository passes `npx tsc --noEmit` again.
