@@ -111,6 +111,42 @@ export function formatPropertyPrice(
   return `NRs. ${formattedPrice}`;
 }
 
+export function getDisplayValue(value: string | null | undefined) {
+  const normalized = value?.trim();
+  return normalized && normalized.length > 0 ? normalized : "N/A";
+}
+
+export function getFeatureValue(
+  features: PropertyFeature[] | undefined,
+  matchers: RegExp[],
+) {
+  if (!features?.length) return null;
+
+  const feature = features.find((item) =>
+    matchers.some((matcher) => matcher.test(`${item.name} ${item.value}`)),
+  );
+
+  return feature?.value?.trim() || null;
+}
+
+export function getBedroomValue(features: PropertyFeature[] | undefined) {
+  return getFeatureValue(features, [/bed/i, /bedroom/i]) ?? "N/A";
+}
+
+export function getBathroomValue(features: PropertyFeature[] | undefined) {
+  return getFeatureValue(features, [/bath/i, /bathroom/i]) ?? "N/A";
+}
+
+export function getSpaceValue(area: string | undefined) {
+  return getDisplayValue(area);
+}
+
+export function formatCountLabel(value: string, label: string) {
+  if (value === "N/A") return value;
+  if (/[a-z]/i.test(value)) return value;
+  return `${value} ${label}`;
+}
+
 type BlogsResponse = {
   data: BlogItem[];
   meta?: {
@@ -130,7 +166,7 @@ type FilterPropertyListingsArgs = {
 type BridgeRecord = Record<string, unknown>;
 
 const API_BASE = "https://api.propertyinnepal.com.np/api/V1";
-const SEARCH_PAGE_SIZE = 9;
+const SEARCH_PAGE_SIZE = 12;
 const PREMIUM_PAGE_SIZE = 9;
 
 function asRecord(value: unknown): BridgeRecord {

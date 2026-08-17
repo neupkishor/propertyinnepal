@@ -3,12 +3,16 @@ import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import PropertyCardS1 from "@/components/estate/propertyCard.s1";
 import { HeroBackgroundVideo } from "@/components/hero-background-video";
 import {
+  formatCountLabel,
   fetchBlogs,
   fetchPremiumProperties,
   fetchPropertyListings,
   formatPropertyPrice,
+  getBathroomValue,
+  getBedroomValue,
+  getDisplayValue,
+  getSpaceValue,
   type BlogItem,
-  type PropertyFeature,
   type PropertyItem,
 } from "@/lib/property-api";
 
@@ -136,42 +140,6 @@ const clientReviews = [
     author: "Nisha Rai",
   },
 ] as const;
-
-function getDisplayValue(value: string | null | undefined) {
-  const normalized = value?.trim();
-  return normalized && normalized.length > 0 ? normalized : "N/A";
-}
-
-function getFeatureValue(
-  features: PropertyFeature[] | undefined,
-  matchers: RegExp[],
-) {
-  if (!features?.length) return null;
-
-  const feature = features.find((item) =>
-    matchers.some((matcher) => matcher.test(`${item.name} ${item.value}`)),
-  );
-
-  return feature?.value?.trim() || null;
-}
-
-function getBedroomValue(features: PropertyFeature[] | undefined) {
-  return getFeatureValue(features, [/bed/i, /bedroom/i]) ?? "N/A";
-}
-
-function getBathroomValue(features: PropertyFeature[] | undefined) {
-  return getFeatureValue(features, [/bath/i, /bathroom/i]) ?? "N/A";
-}
-
-function getSpaceValue(area: string | undefined) {
-  return getDisplayValue(area);
-}
-
-function formatCountLabel(value: string, label: string) {
-  if (value === "N/A") return value;
-  if (/[a-z]/i.test(value)) return value;
-  return `${value} ${label}`;
-}
 
 function ReviewStars({ rating }: { rating: number }) {
   return (
