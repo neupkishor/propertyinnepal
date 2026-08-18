@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DragScrollCarousel } from "@/components/drag-scroll-carousel";
 import PropertyCardS1 from "@/components/estate/propertyCard.s1";
 import { HeroBackgroundVideo } from "@/components/hero-background-video";
+import { logica } from "@/logica";
 import {
   formatCountLabel,
   fetchBlogs,
@@ -15,6 +16,16 @@ import {
   type BlogItem,
   type PropertyItem,
 } from "@/lib/property-api";
+
+type HomepageReview = {
+  author: string;
+  avatar: string;
+  id: string;
+  quote: string;
+  rating: number;
+  source: string;
+  sourceHref: string;
+};
 
 const quickCategories = [
   {
@@ -68,12 +79,12 @@ const quickCategories = [
   },
 ] as const;
 
-const clientReviews = [
+const fallbackClientReviews: HomepageReview[] = [
   {
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&q=80",
+    id: "aayusha-thapa",
     rating: 5,
-    score: "4.9/5",
     quote:
       "Their Lalitpur shortlist was exactly what we wanted. We closed within three weeks.",
     source: "From Google",
@@ -84,8 +95,8 @@ const clientReviews = [
   {
     avatar:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=240&q=80",
+    id: "rijan-karki",
     rating: 5,
-    score: "4.8/5",
     quote:
       "Finally a team that explains pricing honestly in NRS and doesn’t waste your time.",
     source: "From Facebook",
@@ -95,8 +106,8 @@ const clientReviews = [
   {
     avatar:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=240&q=80",
+    id: "pranav-shrestha",
     rating: 5,
-    score: "5.0/5",
     quote:
       "Strong negotiation and smooth process. The listing presentation looked premium.",
     source: "From Google",
@@ -107,8 +118,8 @@ const clientReviews = [
   {
     avatar:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&q=80",
+    id: "smriti-maharjan",
     rating: 5,
-    score: "4.9/5",
     quote:
       "They helped us compare locations clearly and handled the paperwork without confusion.",
     source: "From Google",
@@ -119,8 +130,8 @@ const clientReviews = [
   {
     avatar:
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=240&q=80",
+    id: "bikash-shrestha",
     rating: 5,
-    score: "4.8/5",
     quote:
       "The valuation guidance was practical, and our property received serious buyers quickly.",
     source: "From Facebook",
@@ -130,8 +141,8 @@ const clientReviews = [
   {
     avatar:
       "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=240&q=80",
+    id: "nisha-rai",
     rating: 5,
-    score: "5.0/5",
     quote:
       "Responsive team, clean communication, and a much smoother buying process than expected.",
     source: "From Google",
@@ -363,14 +374,20 @@ function LinkedSectionTitle({
 }
 
 export default async function Home() {
-  const [premiumPayload, recentPayload, blogsPayload] = await Promise.all([
+  const [premiumPayload, recentPayload, blogsPayload, googleBusinessReviews] = await Promise.all([
     fetchPremiumProperties(1),
     fetchPropertyListings({ page: 1 }),
     fetchBlogs(1),
+    logica.thirdparty.googlebusiness.getReviews({
+      businessName: "Property In Nepal Pvt. Ltd",
+      locationId: "05028945782146218024",
+      pageSize: 6,
+    }),
   ]);
   const premiumListings = premiumPayload.data ?? [];
   const recentListings = recentPayload.items ?? [];
   const latestBlogs = (blogsPayload.data ?? []).slice(0, 8);
+  const clientReviews = googleBusinessReviews.length > 0 ? googleBusinessReviews : fallbackClientReviews;
   const featuredListings = premiumListings
     .filter((property) => property.is_featured === "1")
     .slice(0, 8);
@@ -596,8 +613,8 @@ export default async function Home() {
           <div className="relative mx-auto w-full min-w-0 max-w-2xl">
             <div className="overflow-hidden rounded-xl border-[10px] border-slate-200 bg-white sm:border-[18px]">
               <img
-                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=85"
-                alt="Property advisor handing keys to a home buyer"
+                src="/customer.jpeg"
+                alt="Happy customer with the Property in Nepal team"
                 width={1400}
                 height={980}
                 loading="lazy"
@@ -669,7 +686,7 @@ export default async function Home() {
           >
             {clientReviews.map((review) => (
               <figure
-                key={review.author}
+                key={review.id}
                 className="flex min-h-[230px] w-[82vw] max-w-[380px] shrink-0 snap-start flex-col rounded-xl border border-slate-200/70 bg-white p-6 shadow-[0_2px_8px_rgba(31,59,123,0.035)] sm:w-[46vw] lg:w-[31vw] xl:w-[calc((100%_-_2.5rem)_/_3)] xl:max-w-none"
               >
                 <div className="flex items-center gap-3">
