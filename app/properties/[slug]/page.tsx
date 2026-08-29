@@ -73,7 +73,101 @@ function getRoomsAndSpacingFeatures(
   features: { name: string; value: string }[],
   area: string,
 ) {
-  const preferredOrder = [
+  const priorityOrder = [
+    "Bedrooms",
+    "Bathrooms",
+    "Attached Bathrooms",
+    "Living Rooms",
+    "Dining Rooms",
+    "Kitchens",
+    "Floors",
+    "Car Parking",
+    "Bike Parking",
+    "Road Access",
+    "Facing",
+    "Furnishing",
+    "House Type",
+    "Built Year",
+    "Pooja Room",
+    "Store Room",
+    "Study Room",
+    "Land Size",
+    "Area",
+  ];
+  const labelOverrides: Record<string, string> = {
+    attachedbathroom: "Attached Bathrooms",
+    attachedbathrooms: "Attached Bathrooms",
+    bathroom: "Bathrooms",
+    bathrooms: "Bathrooms",
+    bedroom: "Bedrooms",
+    bedrooms: "Bedrooms",
+    buildyear: "Built Year",
+    builtyear: "Built Year",
+    carparking: "Car Parking",
+    carparkings: "Car Parking",
+    faced: "Facing",
+    facing: "Facing",
+    floor: "Floors",
+    floors: "Floors",
+    furnishing: "Furnishing",
+    housetype: "House Type",
+    kitchen: "Kitchens",
+    kitchens: "Kitchens",
+    landsize: "Land Size",
+    livingroom: "Living Rooms",
+    livingrooms: "Living Rooms",
+    poojaroom: "Pooja Room",
+    roadaccess: "Road Access",
+    bathroomattached: "Attached Bathrooms",
+    storeroom: "Store Room",
+    studyroom: "Study Room",
+  };
+
+  const normalizeFeatureName = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const getDisplayName = (name: string) => {
+    const normalizedName = normalizeFeatureName(name);
+    return labelOverrides[normalizedName] ?? toTitleCase(name);
+  };
+
+  const orderedFeatures: { name: string; value: string }[] = [];
+  const seen = new Set<string>();
+
+  for (const feature of features) {
+    const value = feature.value?.trim();
+    if (!value || value === "0") continue;
+
+    const name = getDisplayName(feature.name);
+    const key = `${normalizeFeatureName(name)}:${value.toLowerCase()}`;
+    if (seen.has(key)) continue;
+
+    seen.add(key);
+    orderedFeatures.push({ name, value });
+  }
+
+  if (area && area !== "N/A") {
+    const areaKey = `${normalizeFeatureName("Area")}:${area.toLowerCase()}`;
+    if (!seen.has(areaKey)) {
+      seen.add(areaKey);
+      orderedFeatures.push({ name: "Area", value: area });
+    }
+  }
+
+  return orderedFeatures.sort((left, right) => {
+    const leftIndex = priorityOrder.indexOf(left.name);
+    const rightIndex = priorityOrder.indexOf(right.name);
+    const normalizedLeftIndex = leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex;
+    const normalizedRightIndex = rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex;
+
+    if (normalizedLeftIndex !== normalizedRightIndex) {
+      return normalizedLeftIndex - normalizedRightIndex;
+    }
+
+    return left.name.localeCompare(right.name);
+  });
+}
+
+function getSummaryFeatures(features: { name: string; value: string }[]) {
+  const summaryNames = new Set([
     "Bedrooms",
     "Bathrooms",
     "Living Rooms",
@@ -83,21 +177,9 @@ function getRoomsAndSpacingFeatures(
     "Car Parking",
     "Bike Parking",
     "Area",
-  ];
-  const featureMap = new Map(features.map((feature) => [feature.name, feature.value]));
-  const orderedFeatures = preferredOrder
-    .map((name) => {
-      if (name === "Area") {
-        const value = featureMap.get(name) || area;
-        return value && value !== "N/A" ? { name, value } : null;
-      }
+  ]);
 
-      const value = featureMap.get(name);
-      return value ? { name, value } : null;
-    })
-    .filter((feature): feature is { name: string; value: string } => feature !== null);
-
-  return orderedFeatures;
+  return features.filter((feature) => summaryNames.has(feature.name));
 }
 
 function getFeatureValue(
@@ -333,7 +415,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
     .filter((item) => item.id !== property.id && item.slug !== property.slug)
     .slice(0, 8);
   const roomsAndSpacingFeatures = getRoomsAndSpacingFeatures(property.features, property.area);
-  const aboutFeatureList = formatAboutFeatureList(roomsAndSpacingFeatures);
+  const aboutFeatureList = formatAboutFeatureList(getSummaryFeatures(roomsAndSpacingFeatures));
   const amenityList = getAmenityList(property.facilities);
   const propertyKind = formatPropertyKind(property.type);
   const propertyPurpose = formatPurpose(property.for);
@@ -366,7 +448,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
         <section className="mx-auto max-w-[1440px] px-6 pb-8 lg:px-8 lg:pr-[calc(360px+40px+2rem)]">
           <div className="max-w-5xl">
-            <p className="text-xs font-medium text-slate-500 sm:text-sm">
+            <p className="text-sm font-medium text-slate-500 sm:text-base">
               Property ID: {property.code}
               <span className="mx-2 inline-block h-1 w-1 rounded-full bg-slate-300 align-middle" />
               {property.type}
